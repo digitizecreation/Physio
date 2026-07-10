@@ -13,22 +13,30 @@ export const BUSINESS = {
   hours: "Open 24 Hours • 7 Days a Week",
   address: {
     line1: "Physiotherapy Center, Satyam Hospital",
-    line2: "Sector 14, Kopar Khairane",
+    line2: "Vashi Kopar Khairane Rd, Sector 14, Kopar Khairane",
     city: "Navi Mumbai",
     state: "Maharashtra",
     pincode: "400709",
-    full: "Satyam Hospital, Sector 14, Kopar Khairane, Navi Mumbai, Maharashtra 400709",
+    full:
+      "Physiotherapy Center, Satyam Hospital, Vashi Kopar Khairane Rd, Sector 14, Kopar Khairane, Navi Mumbai, Maharashtra 400709, India",
   },
+  // Verified Google Places coordinates
+  geo: { latitude: 19.0990885, longitude: 73.0046125 },
+  // Verified Google Maps Place URI (cid)
   mapsEmbed:
-    "https://www.google.com/maps?q=Satyam+Hospital,+Sector+14,+Kopar+Khairane,+Navi+Mumbai,+Maharashtra+400709&output=embed",
+    "https://www.google.com/maps?q=19.0990885,73.0046125&z=16&output=embed",
   mapsLink:
-    "https://www.google.com/maps/dir/?api=1&destination=Satyam+Hospital+Sector+14+Kopar+Khairane+Navi+Mumbai+Maharashtra+400709",
+    "https://www.google.com/maps/dir/?api=1&destination=19.0990885,73.0046125",
+  // Direct Google Places profile link (verified)
+  googlePlacesUri:
+    "https://maps.google.com/?cid=2265102277036777400",
   email: "care@drsamrudhhimane.in",
   social: {
     google:
-      "https://www.google.com/maps/search/?api=1&query=Dr+Samrudhhi+Mane+Physiotherapist+Kopar+Khairane",
+      "https://maps.google.com/?cid=2265102277036777400",
   },
 };
+
 
 export const SPECIALIZATIONS = [
   { title: "Knee Pain", icon: "Knee" },
@@ -155,70 +163,72 @@ export const PROCESS_STEPS = [
 
 export const REVIEWS = [
   {
-    name: "Rohit Sharma",
-    condition: "ACL Rehabilitation",
+    name: "shaikh aatif",
+    condition: "ACL & Meniscus Rehab",
     rating: 5,
-    text: "After my ACL reconstruction, I was anxious about returning to sport. Dr. Samrudhhi's structured rehab rebuilt my confidence step by step. Six months later I'm back on the football field — stronger than before. Her patience and clarity are exceptional.",
-    initial: "R",
+    text: "I am Aatif Shaikh from Dhule, Maharashtra. I am truly thankful to Dr. Samrudhhi Mane ma'am for helping me recover after my right knee meniscus repair and ACL reconstruction surgery. I was scared, but she supported me like family. She explained every exercise with patience and constantly motivated me whenever I felt low.\n\nUnder her guidance, my knee mobility, strength, and confidence improved significantly. She is dedicated, kind, and genuinely cares about her patients. I feel blessed to have her as my physiotherapist.\n\nHighly recommended for anyone dealing with similar issues.",
+    initial: "S",
     color: "from-royal to-teal",
+    photoUri:
+      "https://lh3.googleusercontent.com/a/ACg8ocKdZvhI2aXy9i7UoxbwZTNKWfBnPPhjrk4WtjJk1islkZpmHg=s128-c0x00000000-cc-rp-mo",
+    relativeTime: "7 months ago",
+    profileUri:
+      "https://www.google.com/maps/contrib/108160671608979979655/reviews",
   },
   {
-    name: "Priya Nair",
-    condition: "Slip Disc",
-    rating: 5,
-    text: "I could barely walk when I first called her. Within three weeks of her home visits, the sciatica pain had reduced dramatically. She explained every exercise and why it mattered. Genuinely compassionate care.",
-    initial: "P",
-    color: "from-teal to-healing",
-  },
-  {
-    name: "Anil Kulkarni",
-    condition: "Meniscus Rehab",
-    rating: 5,
-    text: "Excellent post-op rehabilitation after my meniscus repair. The progress was visible week by week. Dr. Samrudhhi is professional, motivating and extremely knowledgeable. Highly recommended for any sports injury.",
-    initial: "A",
-    color: "from-royal to-healing",
-  },
-  {
-    name: "Sneha Patil",
+    name: "Ansh Khora",
     condition: "Low Back Pain",
     rating: 5,
-    text: "Years of desk work had ruined my back. Dr. Samrudhhi didn't just treat the pain — she corrected my posture, taught me how to sit, and gave me a simple daily routine. Three months on, I am pain-free for the first time in years.",
-    initial: "S",
-    color: "from-teal to-royal",
-  },
-  {
-    name: "Vikram Deshmukh",
-    condition: "Frozen Shoulder",
-    rating: 5,
-    text: "Frozen shoulder had locked my arm for months. Her manual therapy sessions were painful in the best way — each one unlocked more range. By the end I had full movement back. Forever grateful.",
-    initial: "V",
-    color: "from-healing to-teal",
-  },
-  {
-    name: "Meera Joshi",
-    condition: "Post-Surgery Rehab",
-    rating: 5,
-    text: "She treated my mother at home after her knee replacement. The patience and gentleness she showed made all the difference. My mother looked forward to every session. Worth every rupee.",
-    initial: "M",
-    color: "from-royal to-teal",
-  },
-  {
-    name: "Karan Mehta",
-    condition: "Sports Injury",
-    rating: 5,
-    text: "As a runner, I was devastated by my hamstring tear. Dr. Samrudhhi built a graded return-to-running plan that was both aggressive and safe. PR set within ten weeks. She gets athletes.",
-    initial: "K",
-    color: "from-teal to-healing",
-  },
-  {
-    name: "Asha Rane",
-    condition: "Cervical Pain",
-    rating: 5,
-    text: "Chronic neck pain from phone use — she diagnosed it in minutes. The combination of manual therapy and ergonomic changes worked wonders. Professional, evidence-based, and genuinely caring.",
+    text: "I can't thank Dr Samrudhhi enough for the care and attention I received. From the moment I walked into the clinic, I felt supported and heard. Dr Samrudhhi didn't just treat my low back pain — she took the time to understand my lifestyle, my goals, and helped me regain not just strength, but confidence too. It's rare to find someone so skilled and compassionate. Highly, highly recommended.",
     initial: "A",
-    color: "from-healing to-royal",
+    color: "from-teal to-healing",
+    photoUri:
+      "https://lh3.googleusercontent.com/a-/ALV-UjVzQtFldsiM9YtTTlKquBGIDIETOTrVMb00kpGzN_GMDuI4xbmz8w=s128-c0x00000000-cc-rp-mo",
+    relativeTime: "11 months ago",
+    profileUri:
+      "https://www.google.com/maps/contrib/112493811138921780823/reviews",
+  },
+  {
+    name: "manoj zende",
+    condition: "Knee Recovery",
+    rating: 5,
+    text: "I highly recommend the Dr. Samrudhhi Mane physiotherapy; their professional care and tailored exercises helped me feel confident and stable in my knee again.\n\nThank you, Dr. Samrudhhi, for helping me recover quickly.",
+    initial: "M",
+    color: "from-royal to-healing",
+    photoUri:
+      "https://lh3.googleusercontent.com/a-/ALV-UjXT5zh1o6d4lNFwPQZzzanbkDj9EopD3U1esxenuFd29_psdGoj=s128-c0x00000000-cc-rp-mo",
+    relativeTime: "7 months ago",
+    profileUri:
+      "https://www.google.com/maps/contrib/118178397387147845373/reviews",
+  },
+  {
+    name: "Nikhil Tayade",
+    condition: "Slip Disc Treatment",
+    rating: 5,
+    text: "Visited this clinic with unbearable slip disc pain. I got the best physiotherapy treatment done which subsided my pain over the period of time with proper exercises. Dr. Samrudhhi is soft spoken and entire staff is very hospitable.",
+    initial: "N",
+    color: "from-teal to-royal",
+    photoUri:
+      "https://lh3.googleusercontent.com/a-/ALV-UjU2cvT8cGkX_92HKkbYr4oBaz5FGkhHBV1z7VFVY_mfBQMiHQYZ=s128-c0x00000000-cc-rp-mo",
+    relativeTime: "3 years ago",
+    profileUri:
+      "https://www.google.com/maps/contrib/106136375688620315390/reviews",
+  },
+  {
+    name: "Sanket Patil",
+    condition: "Post-Surgery Knee Rehab",
+    rating: 5,
+    text: "I visited here for post surgery rehabilitation of my knee. Physiotherapy sessions were pain free and had wonderful recovery. Dr. Samrudhhi's exercises helped me a lot in restoring my knee movement.",
+    initial: "S",
+    color: "from-healing to-teal",
+    photoUri:
+      "https://lh3.googleusercontent.com/a/ACg8ocJnVFKx5tI8fTzXgMvS9GPLXrgd-6DW7xA60rWoZF1QMUNSsw=s128-c0x00000000-cc-rp-mo",
+    relativeTime: "3 years ago",
+    profileUri:
+      "https://www.google.com/maps/contrib/108852471682918876102/reviews",
   },
 ] as const;
+
 
 export const CONDITIONS = [
   { title: "Back Pain", body: "back", color: "from-royal/15 to-teal/10" },
