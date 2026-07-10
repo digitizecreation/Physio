@@ -17,7 +17,7 @@ export function Conditions() {
             <span className="gradient-text-soft">complex rehab</span>
           </>
         }
-        description="Tap any condition to learn how Dr. Samrudhhi approaches it — the assessment, the techniques and the milestones you can expect along the way."
+        description="Tap any condition to see how Dr. Samrudhhi approaches it."
       />
 
       <StaggerGroup className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">

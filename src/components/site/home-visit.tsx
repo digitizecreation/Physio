@@ -25,7 +25,7 @@ export function HomeVisit() {
                 <span className="gradient-text-soft">delivered to your door</span>
               </>
             }
-            description="Recovery shouldn't depend on your ability to travel. Dr. Samrudhhi brings the full clinic experience — assessment, manual therapy, supervised exercise — straight to your home, with the same evidence-based protocols."
+            description="Recovery shouldn't depend on your ability to travel. The full clinic experience — assessment, manual therapy and supervised exercise — brought to your home."
           />
 
           <StaggerGroup className="mt-8 grid gap-3 sm:grid-cols-2">

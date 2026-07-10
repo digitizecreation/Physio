@@ -18,7 +18,7 @@ export function TreatmentProcess() {
             <span className="gradient-text-soft">pain to performance</span>
           </>
         }
-        description="No guesswork, no surprises. Every step of your recovery is explained, scheduled and tracked — so you always know what's happening, why, and what's next."
+        description="Every step is explained, scheduled and tracked — so you always know what's next."
       />
 
       <div className="relative mt-16">

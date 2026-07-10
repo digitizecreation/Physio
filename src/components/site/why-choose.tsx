@@ -26,7 +26,7 @@ export function WhyChoose() {
             <span className="gradient-text-soft">beyond the clinic</span>
           </>
         }
-        description="The difference is in the details — how thoroughly you're assessed, how clearly you're educated, and how genuinely you're cared for at every session."
+        description="Thorough assessment, clear education and genuine care at every session."
       />
 
       <StaggerGroup className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

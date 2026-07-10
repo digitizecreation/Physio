@@ -20,7 +20,7 @@ export function Contact() {
             <span className="gradient-text-soft">Navi Mumbai</span>
           </>
         }
-        description="Located inside Satyam Hospital, Sector 14, Kopar Khairane — easily accessible from Ghansoli, Vashi, Airoli and surrounding areas."
+        description="Inside Satyam Hospital, Sector 14, Kopar Khairane — accessible from Ghansoli, Vashi and Airoli."
       />
 
       <div className="mt-14 grid gap-6 lg:grid-cols-[1fr_1.1fr]">

@@ -23,7 +23,7 @@ const PARTS: BodyPart[] = [
     cx: 200,
     cy: 60,
     r: 14,
-    desc: "Cervical pain, stiffness, radiating pain to the arms — usually from posture, disc or strain.",
+    desc: "Cervical pain, stiffness or radiating arm pain — often posture or disc related.",
     treatments: ["Manual therapy & mobilisation", "Deep neck flexor strengthening", "Postural re-education", "Workstation ergonomics"],
   },
   {
@@ -32,7 +32,7 @@ const PARTS: BodyPart[] = [
     cx: 138,
     cy: 110,
     r: 16,
-    desc: "Frozen shoulder, rotator cuff strains, impingement and post-surgical shoulder stiffness.",
+    desc: "Frozen shoulder, rotator cuff strains, impingement and post-surgical stiffness.",
     treatments: ["Joint mobilisation", "Capsular stretching", "Rotator cuff strengthening", "Scapular control drills"],
   },
   {
@@ -41,7 +41,7 @@ const PARTS: BodyPart[] = [
     cx: 200,
     cy: 175,
     r: 16,
-    desc: "Mechanical low back pain, slip disc, sciatica, posture-related strain and post-surgical rehab.",
+    desc: "Mechanical low back pain, slip disc, sciatica and posture-related strain.",
     treatments: ["Core stabilisation", "Manual therapy", "McKenzie & mobility drills", "Lifting mechanics coaching"],
   },
   {
@@ -50,7 +50,7 @@ const PARTS: BodyPart[] = [
     cx: 92,
     cy: 175,
     r: 12,
-    desc: "Tennis elbow, golfer's elbow, wrist sprains and repetitive strain injuries.",
+    desc: "Tennis elbow, golfer's elbow, wrist sprains and repetitive strain.",
     treatments: ["Tendinopathy loading", "Manual therapy", "Taping & bracing", "Activity modification"],
   },
   {
@@ -95,7 +95,7 @@ export function BodyDiagram() {
             <span className="gradient-text-soft">hurts</span> — see how we treat it
           </>
         }
-        description="An interactive guide to the most common areas we treat. Click any highlighted body part to see the typical conditions and the techniques Dr. Samrudhhi uses."
+        description="Click any highlighted body part to see the conditions and techniques used there."
       />
 
       <div className="mt-14 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">

@@ -30,7 +30,7 @@ export function Faq() {
                 <span className="gradient-text-soft">common questions</span>
               </>
             }
-            description="Everything you need to know before your first session. Still have a question? Reach out — we usually reply within the hour."
+            description="Everything you need to know before your first session. Still stuck? Reach out — we usually reply within the hour."
           />
 
           <Reveal delay={0.1}>

@@ -105,9 +105,7 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
             className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground text-pretty sm:text-lg"
           >
-            Expert physiotherapy for{" "}
-            <span className="font-semibold text-foreground">knee pain, back pain, neck pain, sports injuries</span>, ACL & meniscus
-            rehabilitation, post-surgery recovery & home visits across{" "}
+            Knee, back & neck pain, sports injuries, ACL rehab and home visits across{" "}
             <span className="font-semibold text-foreground">Kopar Khairane & Ghansoli, Navi Mumbai</span>.
           </motion.p>
 

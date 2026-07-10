@@ -20,7 +20,7 @@ export function MiniTools() {
             <span className="gradient-text-soft">get started</span>
           </>
         }
-        description="Two fast tools to help you understand your body before your first appointment. Use the BMI calculator for general health context, and the pain self-assessment to know when to seek help."
+        description="Two quick tools to understand your body before your first appointment."
       />
 
       <div className="mt-14 grid gap-6 lg:grid-cols-2">
@@ -153,7 +153,7 @@ function BmiCalculator() {
         </div>
 
         <p className="relative mt-4 text-[11px] leading-relaxed text-muted-foreground">
-          Note: BMI is a general indicator and does not account for muscle mass, age or body composition. Dr. Samrudhhi uses a fuller assessment at your first session.
+          Note: BMI is a general indicator. Dr. Samrudhhi uses a fuller assessment at your first session.
         </p>
       </div>
     </Reveal>
@@ -296,7 +296,7 @@ function PainAssessment() {
 
         <p className="relative mt-4 flex items-center gap-1.5 text-[11px] leading-relaxed text-muted-foreground">
           <TrendingDown className="h-3 w-3" />
-          This self-check is informational only and does not replace a clinical diagnosis.
+          This self-check is informational only — not a clinical diagnosis.
         </p>
       </div>
     </Reveal>

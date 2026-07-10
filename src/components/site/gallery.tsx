@@ -50,7 +50,7 @@ export function Gallery() {
             <span className="gradient-text-soft">how we work</span>
           </>
         }
-        description="From hands-on manual therapy to supervised rehabilitation and home visits — every session is built around focused, one-on-one care."
+        description="Every session is built around focused, one-on-one care."
       />
 
       <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">

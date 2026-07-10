@@ -20,22 +20,22 @@ const pillars = [
   {
     icon: Target,
     title: "Mission",
-    text: "To help every patient move without pain and live without limits — through evidence-based, compassionate physiotherapy delivered with patience and respect.",
+    text: "To help every patient move without pain and live without limits — through evidence-based, compassionate physiotherapy.",
   },
   {
     icon: HeartHandshake,
-    title: "Patient-First Philosophy",
-    text: "You are never a number. Every plan starts by listening to your story, understanding your goals, and designing care that fits your life — not the other way around.",
+    title: "Patient-First",
+    text: "You're never a number. Every plan starts by listening to your story and goals, then fitting care to your life.",
   },
   {
     icon: Microscope,
-    title: "Evidence-Based Care",
-    text: "Treatment is grounded in current research and clinical guidelines. No fads, no shortcuts — only techniques that have been shown to work for your specific condition.",
+    title: "Evidence-Based",
+    text: "Grounded in current research and clinical guidelines. No fads, no shortcuts — only what's shown to work.",
   },
   {
     icon: Sparkles,
     title: "Healing Approach",
-    text: "Pain relief is the start, not the end. We rebuild the strength, mobility and confidence that prevent the problem from returning — so you stay well, not just get well.",
+    text: "Pain relief is the start. We rebuild strength and confidence so the problem doesn't return.",
   },
 ];
 
@@ -65,7 +65,7 @@ export function About() {
             <span className="gradient-text-soft">evidence-based results</span>.
           </>
         }
-        description="A physiotherapist who treats the person, not just the pain — combining clinical precision with genuine warmth to help you recover fully and stay well."
+        description="Treating the person, not just the pain — clinical precision with genuine warmth."
       />
 
       <div className="mt-14 grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
@@ -121,23 +121,16 @@ export function About() {
           <Reveal>
             <div className="space-y-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
               <p>
-                Dr. Samrudhhi A. Mane is a physiotherapist practising at the Physiotherapy Center,
-                Satyam Hospital, Kopar Khairane — with a reputation across Navi Mumbai for{" "}
+                Dr. Samrudhhi A. Mane practises at the Physiotherapy Center, Satyam Hospital,
+                Kopar Khairane — known across Navi Mumbai for{" "}
                 <span className="font-semibold text-foreground">knee, back and neck pain</span>,
-                sports injury rehabilitation and post-surgical recovery.
+                sports injury rehab and post-surgical recovery.
               </p>
               <p>
-                Her practice is built on a simple belief: recovery is not a protocol to be applied,
-                but a partnership to be built. Every patient receives{" "}
+                Her belief is simple: recovery is a partnership, not a protocol. Every patient gets{" "}
                 <span className="font-semibold text-foreground">one-on-one, unhurried sessions</span>{" "}
-                — assessment, hands-on therapy, supervised exercise and clear education about the
-                why behind every step.
-              </p>
-              <p>
-                For patients who cannot travel — post-surgery, elderly, or simply time-poor — she
-                brings the same quality of care directly to homes across{" "}
-                <span className="font-semibold text-foreground">Kopar Khairane, Ghansoli and nearby areas</span>{" "}
-                through structured home-visit physiotherapy.
+                — and for those who can't travel, the same care at home across{" "}
+                <span className="font-semibold text-foreground">Kopar Khairane, Ghansoli & nearby areas</span>.
               </p>
             </div>
           </Reveal>
@@ -180,10 +173,8 @@ export function About() {
           <Reveal delay={0.15}>
             <div className="mt-6 flex flex-wrap items-center gap-3 rounded-2xl border border-healing/30 bg-healing/10 p-4 text-sm">
               <CheckCircle2 className="h-5 w-5 text-healing" />
-              <span className="font-semibold text-foreground">Personalized treatment plans</span>
-              <span className="text-muted-foreground">
-                — written, explained, and adjusted at every session based on your progress.
-              </span>
+              <span className="font-semibold text-foreground">Personalized plans</span>
+              <span className="text-muted-foreground">— written, explained and adjusted every session.</span>
             </div>
           </Reveal>
         </div>

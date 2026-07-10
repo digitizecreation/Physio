@@ -67,7 +67,7 @@ export function Appointment() {
                   <span className="gradient-text-soft">towards recovery</span>
                 </>
               }
-              description="Book your assessment in under a minute. Same-day slots often available — for clinic visits and home visits across Kopar Khairane & Ghansoli."
+              description="Book your assessment in under a minute. Same-day slots often available."
             />
 
             <Reveal delay={0.1}>
@@ -142,7 +142,7 @@ export function Appointment() {
                   </motion.div>
                   <h3 className="font-heading text-xl font-bold text-foreground">Request received!</h3>
                   <p className="max-w-sm text-sm text-muted-foreground">
-                    Thank you. Dr. Samrudhhi's team will confirm your appointment shortly. For urgent matters, please call or WhatsApp directly.
+                    Thank you. Dr. Samrudhhi's team will confirm shortly. For urgent matters, please call or WhatsApp.
                   </p>
                   <div className="mt-3 flex flex-wrap justify-center gap-2">
                     <Button asChild size="sm" variant="outline" className="gap-2">
@@ -306,7 +306,7 @@ export function Appointment() {
                     <Textarea
                       id="notes"
                       rows={3}
-                      placeholder="Briefly describe your symptoms, history, or any specific concerns..."
+                      placeholder="Briefly describe your symptoms..."
                       className="mt-1.5 resize-none"
                     />
                   </div>
@@ -331,13 +331,13 @@ export function Appointment() {
 
                   {!selectedSlot && (
                     <p className="text-center text-[11px] text-muted-foreground">
-                      Please select a preferred time slot above.
+                      Please select a preferred time slot.
                     </p>
                   )}
 
                   <p className="flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
                     <ChevronRight className="h-3 w-3" />
-                    No payment required — we'll confirm availability before your visit.
+                    No payment required — we confirm availability before your visit.
                   </p>
                 </form>
               )}

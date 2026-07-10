@@ -34,7 +34,7 @@ export function Specializations() {
             <span className="gradient-text-soft">every kind of pain</span>
           </>
         }
-        description="From acute sports injuries to chronic arthritis, post-surgical rehab to elderly mobility — every condition below is treated with a structured, evidence-based protocol tailored to you."
+        description="From acute sports injuries to chronic arthritis — each treated with a structured, evidence-based protocol."
       />
 
       <StaggerGroup className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
@@ -78,7 +78,7 @@ export function Specializations() {
             Not sure which treatment you need?
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            Book a single assessment session — Dr. Samrudhhi will diagnose your condition and outline the right path forward, no obligations.
+            Book a single assessment — Dr. Samrudhhi will diagnose and outline the right path forward.
           </p>
         </div>
         <a

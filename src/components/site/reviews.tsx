@@ -50,7 +50,7 @@ export function Reviews() {
               <span className="gradient-text-soft">in their own words</span>
             </>
           }
-          description="A recurring theme runs through every review — compassion, patience, and clinical expertise that patients could feel at every session."
+          description="Compassion, patience and clinical expertise — themes patients return to again and again."
         />
 
         <motion.div
