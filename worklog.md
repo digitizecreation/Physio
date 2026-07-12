@@ -119,3 +119,72 @@ Stage Summary:
   1. Resolve the 4 build-breaking TypeScript errors so `next build` succeeds: (a) chatbot.tsx getBotResponse return type → change to `Omit<Message,"id">`; (b) hero.tsx:63 GoogleStar needs to accept `style` (or wrap in span); (c) reviews.tsx:30 + conditions.tsx:29 cast embla.on() return to `() => void` (or use embla.off); (d) next.config.ts:9-11 remove the `eslint` block (removed from NextConfig in Next.js 16 — FlatConfig in eslint.config.mjs is now authoritative).
   2. Fix the mobile layout collision (floating-actions.tsx vs sticky CTA bar at bottom): hide the right-side Call/WhatsApp floating cluster on mobile when the sticky CTA is visible (or vice-versa), and lift the chatbot launcher above the CTA bar.
   3. Wire the appointment consent "Privacy Policy" link (appointment.tsx:331) to actually open the footer's PrivacyDialog — currently `e.preventDefault()` makes it a dead link, so users cannot read the policy they are consenting to (DPDP Act 2023 notice gap; also flagged by Task 6 SEC-03).
+
+---
+Task ID: 8
+Agent: Security Reviewer
+Task: Fresh re-run — verify previous fixes, catch new issues from TopBar addition
+
+Work Log:
+- Read worklog.md (noted Tasks 1, 3, 4, 5, 6 — most recent security entry is Task 6 covering chatbot/Google-branding)
+- Read and analysed 16 source/config files: app (layout.tsx, page.tsx), lib/site/data.ts, all in-scope site components (top-bar.tsx ⭐NEW, chatbot.tsx, google-brand.tsx, reviews.tsx, appointment.tsx, contact.tsx, footer.tsx, navbar.tsx, mini-tools.tsx, floating-actions.tsx, gallery.tsx, loading-screen.tsx, body-diagram.tsx), next.config.ts, Caddyfile, package.json, .gitignore, .env
+- Grepped src/ for: dangerouslySetInnerHTML (only layout.tsx JSON-LD + dormant chart.tsx — chart.tsx not imported anywhere, confirmed), eval/new Function/string-arg setTimeout/innerHTML/document.write (none), process.env (none in src/), console.* (none), javascript:/data:text/html URIs (none), all href={...} sinks (all derived from hardcoded BUSINESS constants, NAV_LINKS, quickLinks, or treatmentLinks — zero user input reaches any URL sink), all target="_blank" rel attributes (every one carries rel="noopener noreferrer"), window.location/window.open calls (only in chatbot.tsx — all use hardcoded BUSINESS.* URLs with "noopener noreferrer")
+- Traced untrusted data flows: (1) chatbot free-text input → maxLength=300 → keyword-matched via String.includes on lowercased input against hardcoded KEYWORD_MAP → response from hardcoded BUSINESS/FAQS literals; user text rendered via JSX {message.text} with whitespace-pre-line (React-escaped) — no XSS sink; PII/PHI disclaimer now present (chatbot.tsx:407-409). (2) appointment form fields — captured in React state, simulated submit only, never transmitted; consent link now opens PrivacyDialog (appointment.tsx:335,377). (3) BMI inputs — parseFloat with NaN/positive guards (mini-tools.tsx:42-45). (4) pain assessment — boolean toggles against hardcoded PAIN_QUESTIONS, no free text. (5) JSON-LD — fully developer-controlled literals with <, >, U+2028, U+2029 escape replacements (layout.tsx:297-301). (6) review photoUri/profileUri — hardcoded Google URLs, rendered with referrerPolicy="no-referrer". (7) maps iframe src — hardcoded BUSINESS.mapsEmbed, sandboxed (no allow-same-origin).
+- Verified NEW TopBar in depth: every href derived from BUSINESS.phoneHref (tel:) or "#appointment" anchor; GoogleG/GoogleStar inline SVGs have no user input; `hidden` prop is a plain boolean used only in motion animate target; no dangerouslySetInnerHTML, no eval, no string-arg setTimeout, no user-controlled URI sink, no target="_blank". TopBar is security-clean.
+- Verified previously-flagged issues against current state:
+  • Task 6 SEC-01 (CSP 'unsafe-eval') → FIXED (next.config.ts:22 — script-src is now 'self' 'unsafe-inline' only)
+  • Task 6 SEC-02 (CSP 'unsafe-inline' in script-src, no nonces) → STILL OPEN (low)
+  • Task 6 SEC-03 (appointment consent Privacy Policy link broken) → FIXED (appointment.tsx:335 now setShowPrivacy(true); dialog rendered at line 377)
+  • Task 6 SEC-04 (chatbot no PII/PHI disclaimer) → FIXED (chatbot.tsx:407-409)
+  • Task 6 SEC-05 (large unused dependency surface) → STILL OPEN (informational)
+  • Task 6 SEC-06 (maps iframe allow-scripts + allow-same-origin combo) → FIXED (contact.tsx:129 — allow-same-origin removed; now `allow-scripts allow-popups allow-popups-to-escape-sandbox`)
+  • Task 4 SEC-01 (Caddyfile SSRF proxy) → STILL FIXED (only plain reverse_proxy remains)
+  • Task 4 SEC-02 (missing security headers) → STILL FIXED (CSP, X-Frame-Options: DENY, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, HSTS all present in next.config.ts:14-38)
+  • Task 4 SEC-03 (DPDP compliance) → NOW FULLY FIXED (Privacy Policy + Terms dialogs in footer; appointment consent dialog opens inline Privacy Policy referencing DPDP Act 2023)
+- Confirmed no API surface at all (src/app/api/ does not exist), no auth, no DB usage, no process.env reads, no console logging, no eval/Function constructors anywhere in src/
+
+Stage Summary:
+- New vulnerabilities found: 1 (SEC-01 low: Caddyfile binds to :81 plain HTTP, no TLS termination — HSTS header is moot if served over HTTP)
+- Still open: 3 (SEC-02 low: CSP 'unsafe-inline' in script-src without nonces — carried over from Task 6 SEC-02; SEC-03 informational: large unused dependency surface — carried over from Task 6 SEC-05; SEC-04 low: appointment form silently discards consented PII — false-consent under DPDP Act 2023)
+- Now fixed: 5 (CSP 'unsafe-eval' removed; appointment consent Privacy Policy link wired; chatbot PII/PHI disclaimer added; maps iframe allow-same-origin removed; DPDP compliance fully landed)
+- Overall posture: Strong. The NEW TopBar introduces zero security issues — every href and SVG derives from hardcoded BUSINESS constants, with no XSS sink, no user input flow, and no URI injection. All previous security fixes from Task 4/6 are intact and the CSP has been further tightened (no more 'unsafe-eval'). No XSS or injection sinks reachable from user input across the entire codebase. Remaining items are defense-in-depth refinements (CSP nonces, TLS at the edge, dependency hygiene) and one privacy/consent gap (appointment form simulated submit).
+- Top 3 priorities to fix:
+  1. Terminate TLS at Caddy (Caddyfile binds to :81 plain HTTP) — either change site block to the production hostname so Caddy auto-issues Let's Encrypt certs, or front it with a TLS-terminating load balancer. As written, the HSTS header set in next.config.ts:32-34 is ignored by browsers (HSTS only applies over HTTPS), and any PII typed into the appointment form would traverse the network in plaintext.
+  2. Switch CSP `script-src` from `'unsafe-inline'` to nonce-based inline-script allow-listing (next.config.ts:22) — Next.js 16 supports per-request nonces via `next.config.ts` + middleware. This closes the last XSS defense-in-depth gap if any future input ever reaches an inline-script sink.
+  3. Either wire the appointment form to a real backend (API route / WhatsApp Business API / email service) that persists the consented PII, or surface a clear "demo form — please call to book" notice. As-is, users consent to data collection that never happens — a DPDP Act 2023 false-consent gap. Also remove the unused heavy deps (next-auth, prisma, @mdxeditor/editor, @dnd-kit/*, z-ai-web-dev-sdk, react-syntax-highlighter, recharts, etc.) to shrink the supply-chain attack surface.
+
+---
+Task ID: 7
+Agent: Code Reviewer
+Task: Fresh re-run — verify previous fixes, catch new issues from TopBar addition
+
+Work Log:
+- Read worklog.md (noted Tasks 1, 3, 4, 5, 6, 8 — most recent code-review was Task 5; Task 8 Security Reviewer ran in parallel and confirmed all previous security fixes intact)
+- Read and analysed 24 source/config files under src/ + project root: app (layout.tsx, page.tsx, globals.css), lib (site/data.ts, utils.ts), all 19 site components including NEW top-bar.tsx ⭐, plus next.config.ts, eslint.config.mjs, tsconfig.json, public/ assets
+- Cross-referenced current state against Task 1, Task 3, Task 5, and Task 6/8 findings
+- Ran `npx tsc --noEmit` — confirmed ZERO type errors in src/ (all 8 TS errors are in out-of-scope examples/scripts/skills directories which are gitignored from the build)
+- Ran `npx eslint src/` — passes clean (exit 0)
+- Computed WCAG contrast ratios for the NEW TopBar gradient (white text on royal vs teal) using sRGB luminance math to verify a suspected contrast failure
+- Verified previously-flagged items against current state:
+  • OG image 404 → STILL FIXED (public/og-image.png exists, 42 KB)
+  • typescript.ignoreBuildErrors → STILL FIXED (next.config.ts:7 = false)
+  • dead tailwind.config.ts → STILL FIXED (removed; Tailwind v4 via @theme inline in globals.css)
+  • Navbar mobile drawer a11y → STILL FIXED (ESC, scroll-lock, focus-trap, role=dialog, aria-modal, focus restore — navbar.tsx:36-71, 171-173)
+  • Gallery lightbox a11y → STILL FIXED (ESC, arrow keys, scroll-lock, focus-trap, role=dialog, aria-modal, focus restore — gallery.tsx:31-61, 210-211)
+  • 4 build-breaking TS errors from Task 5 → ALL STILL FIXED (chatbot getBotResponse returns Omit<Message,"id">; GoogleStar accepts style; embla.on() cast in reviews.tsx:28 + why-choose.tsx:40; eslint block removed from next.config.ts)
+  • Appointment consent Privacy Policy link → STILL FIXED (appointment.tsx:335 opens PrivacyDialog, rendered at :377)
+  • Chatbot PHI disclaimer → STILL FIXED (chatbot.tsx:407-409)
+  • CSP 'unsafe-eval' → STILL FIXED (next.config.ts:22 — script-src is 'self' 'unsafe-inline' only)
+  • Mobile layout collision (floating-actions vs sticky CTA vs chatbot) → STILL FIXED (right cluster hidden sm:flex; sticky CTA sm:hidden; chatbot launcher bottom-20 sm:bottom-6; chatbot panel bottom-40 sm:bottom-24)
+  • Form submission still simulated → STILL OPEN (appointment.tsx:52-56 — setTimeout, comment "wire to real backend when ready")
+- Confirmed dead-code cleanup from Task 3 is intact: src/hooks/ directory removed (no use-toast.ts / use-mobile.ts); src/lib/db.ts removed; src/components/ui/chart.tsx + sidebar.tsx + toaster.tsx not imported anywhere
+
+Stage Summary:
+- New issues found: 7 (CR-01 through CR-07) — see full report
+- Still open: 3 (appointment form simulated submit; carousel autoplay ignores prefers-reduced-motion; duplicate PrivacyContent in appointment + footer)
+- Now fixed: 11 (all previous high-priority items remain fixed — verified)
+- Overall code quality assessment: The codebase is in its healthiest state yet. The NEW TopBar is well-structured, security-clean (per Task 8), and visually polished — but introduces two real accessibility regressions: (1) its interactive links remain in the keyboard tab order when the header hides on scroll (focus-trap-on-scroll), and (2) white text on the teal half of its gradient fails WCAG AA contrast (2.49:1 for solid white, 1.89:1 for text-white/70). Both are fixable in <15 lines. The TopBar also has a redundant double-transform animation (parent -160 + own -50) that is harmless but noisy. All previous critical/major fixes from Tasks 1/3/5/6 remain intact. The codebase passes `tsc --noEmit` and `eslint src/` clean. The only carry-over is the still-simulated appointment form, which is a product decision rather than a code defect.
+- Top 3 priorities to fix:
+  1. Fix TopBar WCAG AA contrast failure (top-bar.tsx:20, 43-59): white/80 and white/70 text over the teal end of the `from-royal via-royal to-teal` gradient yields 1.89–2.49:1 contrast (AA needs 4.5:1). Either darken the teal stop, switch the gradient to royal→royal (solid), or move all text to the left/royal half.
+  2. Fix keyboard focus-trap-on-scroll (navbar.tsx:75-82 + top-bar.tsx:14): when `hidden=true`, the entire `<motion.header>` (including TopBar's phone + Book Appointment links, the navbar logo, nav links, theme toggle, and Call Now button) is translated off-screen via `transform: translateY(-160px)` but remains focusable — Tab will land on invisible links and the browser will scroll-jump to show them. Add `inert` (or `aria-hidden` + `tabIndex={-1}`) to the header when `hidden=true`.
+  3. Make the Reviews and WhyChoose carousel autoplay respect `prefers-reduced-motion` (reviews.tsx:46-56, why-choose.tsx:58-67): a user with reduced-motion preference still sees the carousel auto-advancing every 5 s. Guard `startAutoplay()` with `const prefersReduced = useReducedMotion(); if (prefersReduced) return;`.
