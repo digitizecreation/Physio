@@ -219,9 +219,7 @@ After making changes, verify with **Agent Browser**:
 ---
 
 ## Changelog (Recent)
-- **2025-07-12**: Removed test comment from utils.ts
-- **2025-07-12**: Added test comment to utils.ts for hook verification
-- **2025-07-12**: Cleaned up test artifacts and verified post-commit hook works correctly
+- **2025-07-12**: Set up git post-commit hook for automatic Claude.md updates (scripts/post-commit, scripts/update-claude-md.ts, scripts/install-hooks.sh)
 
 - **2025-07-12**: Redesigned Gallery to premium magazine-style layout with featured card + compact grid
 - **2025-07-12**: Redesigned Specializations to dark-navy 8-column grid matching reference image
