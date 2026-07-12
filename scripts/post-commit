@@ -1,0 +1,93 @@
+#!/bin/bash
+#
+# Git post-commit hook: Auto-update Claude.md
+#
+# This hook runs automatically after every `git commit`.
+# It:
+#   1. Runs lint + TypeScript check (to confirm the commit is "tested")
+#   2. If checks pass, runs the update-claude-md.ts script
+#   3. If Claude.md was modified, auto-amends the commit to include it
+#
+# To skip this hook for a specific commit, set the env var:
+#   SKIP_CLAUDE_MD_UPDATE=1 git commit -m "..."
+#
+
+set -e
+
+# Allow skipping
+if [ "$SKIP_CLAUDE_MD_UPDATE" = "1" ]; then
+  echo "⏭️  Skipping Claude.md update (SKIP_CLAUDE_MD_UPDATE=1)"
+  exit 0
+fi
+
+# Guard against re-entry: if the commit message starts with "[amend]" or
+# we're already in a CLAUDE_MD_UPDATING session, skip.
+if [ "$CLAUDE_MD_UPDATING" = "1" ]; then
+  exit 0
+fi
+
+PROJECT_DIR="/home/z/my-project"
+cd "$PROJECT_DIR"
+
+# Check if Claude.md was the ONLY changed file (likely an amend from ourselves)
+CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+if [ "$CHANGED_FILES" = "Claude.md" ]; then
+  # This is likely our own amend — skip to avoid infinite loop
+  exit 0
+fi
+
+echo ""
+echo "📋 Post-commit: Checking code quality..."
+
+# ─── Step 1: Lint check ────────────────────────────────────
+echo "🔍 Running ESLint..."
+LINT_OUTPUT=$(bun run lint 2>&1 || true)
+if echo "$LINT_OUTPUT" | grep -q "✖.*error"; then
+  echo "⚠️  Lint has warnings/errors — still updating Claude.md but please fix issues."
+else
+  echo "✅ Lint passed."
+fi
+
+# ─── Step 2: TypeScript check (src/ only) ──────────────────
+echo "🔍 Running TypeScript check..."
+TS_ERRORS=$(npx tsc --noEmit 2>&1 | grep "^src/" || true)
+if [ -z "$TS_ERRORS" ]; then
+  echo "✅ TypeScript check passed (src/)."
+else
+  echo "⚠️  TypeScript errors in src/:"
+  echo "$TS_ERRORS"
+  echo "⚠️  Still updating Claude.md but please fix TS errors."
+fi
+
+# ─── Step 3: Run the Claude.md updater ─────────────────────
+echo ""
+echo "🤖 Running Claude.md auto-updater..."
+
+# Set env var to prevent re-entry during amend
+export CLAUDE_MD_UPDATING=1
+
+if bun run scripts/update-claude-md.ts 2>&1; then
+  # Check if Claude.md was modified
+  if ! git diff --quiet Claude.md 2>/dev/null; then
+    echo ""
+    echo "📝 Claude.md was updated. Staging and amending the commit..."
+
+    # Stage the updated Claude.md
+    git add Claude.md
+
+    # Amend the last commit to include Claude.md
+    # This keeps history clean — the Claude.md update is part of the feature commit
+    git commit --amend --no-edit
+
+    echo "✅ Commit amended to include Claude.md update."
+  else
+    echo "ℹ️  Claude.md was not modified."
+  fi
+else
+  echo "⚠️  Claude.md updater failed. Continuing without update."
+fi
+
+unset CLAUDE_MD_UPDATING
+
+echo ""
+echo "✨ Post-commit hook complete."

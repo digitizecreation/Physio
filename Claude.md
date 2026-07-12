@@ -219,6 +219,7 @@ After making changes, verify with **Agent Browser**:
 ---
 
 ## Changelog (Recent)
+- **2025-07-12**: Added git hooks and scripts for automatic Claude.md updates
 - **2025-07-12**: Set up git post-commit hook for automatic Claude.md updates (scripts/post-commit, scripts/update-claude-md.ts, scripts/install-hooks.sh)
 
 - **2025-07-12**: Redesigned Gallery to premium magazine-style layout with featured card + compact grid
@@ -229,3 +230,10 @@ After making changes, verify with **Agent Browser**:
 - **2025-07-12**: Added Google branding (GoogleG + GoogleStar) consistently across all sections
 - **2025-07-12**: Fixed 19 issues from code+security review (TS errors, mobile layout, controlled form, Privacy dialog, CSP tightening, etc.)
 - **2025-07-12**: Added interactive hero text (hover color change), site-wide animations, `useReducedMotion` support
+
+<!--
+AUTO-GENERATED DOC UPDATE SUGGESTIONS (from commit de14259 on 2026-07-12)
+Review and apply manually, then delete this comment:
+- Update the Build & Lint section to include the new `install-hooks.sh` script as part of the setup process
+- Add a note in the Project Structure section about the new `scripts/` directory and its purpose for automation scripts
+-->
