@@ -219,7 +219,7 @@ After making changes, verify with **Agent Browser**:
 ---
 
 ## Changelog (Recent)
-- **2025-07-12**: Test edit to verify post-commit hook works
+- **2025-07-12**: Cleaned up test artifacts and verified post-commit hook works correctly
 
 - **2025-07-12**: Redesigned Gallery to premium magazine-style layout with featured card + compact grid
 - **2025-07-12**: Redesigned Specializations to dark-navy 8-column grid matching reference image
