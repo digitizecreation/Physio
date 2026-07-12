@@ -229,8 +229,3 @@ After making changes, verify with **Agent Browser**:
 - **2025-07-12**: Added Google branding (GoogleG + GoogleStar) consistently across all sections
 - **2025-07-12**: Fixed 19 issues from code+security review (TS errors, mobile layout, controlled form, Privacy dialog, CSP tightening, etc.)
 - **2025-07-12**: Added interactive hero text (hover color change), site-wide animations, `useReducedMotion` support
-
-<!--
-Test edit to verify the post-commit hook works.
-This will be removed after testing.
--->
