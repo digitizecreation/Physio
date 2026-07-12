@@ -5,11 +5,16 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Activity } from "lucide-react";
 
 export function LoadingScreen() {
-  const [done, setDone] = React.useState(false);
   const prefersReduced = useReducedMotion();
+  // If reduced motion is requested, skip the loading screen entirely (no flash)
+  const [done, setDone] = React.useState(!!prefersReduced);
 
   React.useEffect(() => {
-    const t = setTimeout(() => setDone(true), prefersReduced ? 0 : 300);
+    if (prefersReduced) {
+      setDone(true);
+      return;
+    }
+    const t = setTimeout(() => setDone(true), 300);
     return () => clearTimeout(t);
   }, [prefersReduced]);
 

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SectionWrap, SectionHeading } from "@/components/site/reveal";
 import { Icon } from "@/components/site/icon";
@@ -42,12 +42,13 @@ export function WhyChoose() {
     return () => denoise?.();
   }, [embla, onSelect]);
 
-  // autoplay with pause on hover/focus + visibility change
+  // autoplay with pause on hover/focus + visibility change; disabled for reduced-motion
+  const prefersReduced = useReducedMotion();
   const autoplayRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
   const startAutoplay = React.useCallback(() => {
-    if (!embla) return;
+    if (!embla || prefersReduced) return;
     autoplayRef.current = setInterval(() => embla.scrollNext(), 5000);
-  }, [embla]);
+  }, [embla, prefersReduced]);
   const stopAutoplay = React.useCallback(() => {
     if (autoplayRef.current) {
       clearInterval(autoplayRef.current);

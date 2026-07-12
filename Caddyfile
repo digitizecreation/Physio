@@ -1,10 +1,17 @@
-:81 {
-        handle {
-                reverse_proxy localhost:3000 {
-                        header_up Host {host}
-                        header_up X-Forwarded-For {remote_host}
-                        header_up X-Forwarded-Proto {scheme}
-                        header_up X-Real-IP {remote_host}
-                }
-        }
+# Production config: Caddy auto-provisions TLS via Let's Encrypt
+# Replace drsamrudhhimane.in with the actual domain when deploying.
+#
+# For local dev, use :81 (plain HTTP) — Caddy will not issue certs for bare ports.
+# The HSTS header in next.config.ts only takes effect over HTTPS, so production
+# MUST use a hostname-based site block (not :81) for TLS to be active.
+
+drsamrudhhimane.in {
+	handle {
+		reverse_proxy localhost:3000 {
+			header_up Host {host}
+			header_up X-Forwarded-For {remote_host}
+			header_up X-Forwarded-Proto {scheme}
+			header_up X-Real-IP {remote_host}
+		}
+	}
 }

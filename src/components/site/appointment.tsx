@@ -367,6 +367,9 @@ export function Appointment() {
                     <ChevronRight className="h-3 w-3" />
                     No payment required — we confirm availability before your visit.
                   </p>
+                  <p className="text-center text-[10px] text-muted-foreground">
+                    This form sends a booking request to Dr. Samrudhhi's team. For urgent appointments, please call or WhatsApp directly.
+                  </p>
                 </form>
               )}
             </div>

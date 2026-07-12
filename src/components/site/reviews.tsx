@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { SectionWrap, SectionHeading } from "@/components/site/reveal";
 import { REVIEWS, BUSINESS } from "@/lib/site/data";
@@ -30,12 +30,13 @@ export function Reviews() {
     return () => denoise?.();
   }, [embla, onSelect]);
 
-  // autoplay — pauses on hover/focus/interaction
+  // autoplay — pauses on hover/focus/interaction; disabled for reduced-motion users
+  const prefersReduced = useReducedMotion();
   const autoplayRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
   const startAutoplay = React.useCallback(() => {
-    if (!embla) return;
+    if (!embla || prefersReduced) return;
     autoplayRef.current = setInterval(() => embla.scrollNext(), 5000);
-  }, [embla]);
+  }, [embla, prefersReduced]);
   const stopAutoplay = React.useCallback(() => {
     if (autoplayRef.current) {
       clearInterval(autoplayRef.current);

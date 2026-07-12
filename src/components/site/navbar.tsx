@@ -77,9 +77,11 @@ export function Navbar() {
         animate={{ y: hidden ? -160 : 0 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
         className="fixed inset-x-0 top-0 z-50"
+        inert={hidden || undefined}
+        aria-hidden={hidden || undefined}
       >
         {/* Premium thin top bar — hidden on mobile, hidden on scroll */}
-        <TopBar hidden={hidden} />
+        <TopBar />
 
         {/* Main navbar */}
         <div className="px-3 pt-3">

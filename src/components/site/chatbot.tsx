@@ -360,9 +360,12 @@ export function ChatBot() {
               </button>
             </div>
 
-            {/* Messages */}
+            {/* Messages — aria-live announces new messages to screen readers */}
             <div
               ref={scrollRef}
+              aria-live="polite"
+              aria-atomic="false"
+              aria-label="Chat messages"
               className="flex-1 space-y-3 overflow-y-auto p-4"
               style={{ scrollbarWidth: "thin" }}
             >

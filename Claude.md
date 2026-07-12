@@ -219,6 +219,7 @@ After making changes, verify with **Agent Browser**:
 ---
 
 ## Changelog (Recent)
+- **2025-07-12**: Improved accessibility for loading screen and chatbot, updated Caddyfile for production
 - **2025-07-12**: Added worklog.md file for project tracking
 - **2025-07-12**: Added premium top bar component with contact info and social proof
 - **2025-07-12**: Added git hooks and scripts for automatic Claude.md updates
@@ -234,8 +235,8 @@ After making changes, verify with **Agent Browser**:
 - **2025-07-12**: Added interactive hero text (hover color change), site-wide animations, `useReducedMotion` support
 
 <!--
-AUTO-GENERATED DOC UPDATE SUGGESTIONS (from commit b8e7dc5 on 2026-07-12)
+AUTO-GENERATED DOC UPDATE SUGGESTIONS (from commit aa6fc09 on 2026-07-12)
 Review and apply manually, then delete this comment:
-- Update the Build & Lint section to include the new 'scripts/' directory in the ignores list
-- Add TopBar to the list of site components in Project Structure
+- Update the Browser Verification section to include testing for aria-live announcements in the chatbot
+- Add a note in Project Structure about the inert attribute usage in the Navbar for accessibility
 -->
