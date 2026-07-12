@@ -120,14 +120,14 @@ export function SectionHeading({
     >
       {eyebrow && (
         <Reveal>
-          <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/60 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary backdrop-blur">
-            <span className="h-1.5 w-1.5 rounded-full bg-healing" />
+          <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/60 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary backdrop-blur transition-colors hover:border-primary/40">
+            <span className="h-1.5 w-1.5 rounded-full bg-healing animate-pulse-dot" />
             {eyebrow}
           </span>
         </Reveal>
       )}
       <Reveal delay={0.05}>
-        <h2 className="mt-4 font-heading text-3xl font-bold tracking-tight text-foreground text-balance sm:text-4xl md:text-[2.7rem] md:leading-[1.1]">
+        <h2 className="underline-grow mt-4 inline-block font-heading text-3xl font-bold tracking-tight text-foreground text-balance sm:text-4xl md:text-[2.7rem] md:leading-[1.1]">
           {title}
         </h2>
       </Reveal>

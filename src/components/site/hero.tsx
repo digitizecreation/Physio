@@ -20,7 +20,7 @@ export function Hero() {
     <section id="top" className="relative isolate overflow-hidden pt-28 sm:pt-32 md:pt-40">
       {/* Background mesh + glow */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-mesh" aria-hidden />
-      <div className="pointer-events-none absolute -top-32 left-1/2 -z-10 h-[520px] w-[920px] -translate-x-1/2 rounded-full bg-gradient-to-tr from-royal/25 via-teal/15 to-healing/10 blur-3xl" aria-hidden />
+      <div className="pointer-events-none absolute -top-32 left-1/2 -z-10 h-[520px] w-[920px] -translate-x-1/2 animate-breathe rounded-full bg-gradient-to-tr from-royal/25 via-teal/15 to-healing/10 blur-3xl" aria-hidden />
       <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.6] [background:radial-gradient(circle_at_50%_0%,color-mix(in_oklch,var(--royal)_8%,transparent),transparent_60%)]" aria-hidden />
 
       {/* Floating icons */}
@@ -53,15 +53,16 @@ export function Hero() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/70 px-3.5 py-1.5 text-xs font-semibold text-foreground backdrop-blur"
+            whileHover={{ scale: 1.03 }}
+            className="group inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/70 px-3.5 py-1.5 text-xs font-semibold text-foreground backdrop-blur transition-colors hover:border-healing/40"
           >
             <span className="flex -space-x-1">
               {[0, 1, 2, 3, 4].map((i) => (
-                <Star key={i} className="h-3 w-3 fill-healing text-healing" />
+                <Star key={i} className="h-3 w-3 fill-healing text-healing transition-transform group-hover:scale-110" style={{ transitionDelay: `${i * 40}ms` }} />
               ))}
             </span>
             <span className="text-muted-foreground">
-              4.9 / 5 · <span className="text-foreground">155+ Google Reviews</span>
+              4.9 / 5 · <span className="text-foreground transition-colors group-hover:text-healing">155+ Google Reviews</span>
             </span>
           </motion.span>
 
@@ -71,9 +72,9 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
             className="mt-5 font-heading text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground text-balance sm:text-5xl md:text-6xl"
           >
-            Move Without Pain.{" "}
+            <span className="text-interactive inline-block">Move Without Pain.</span>{" "}
             <span className="relative">
-              <span className="gradient-text">Live Without Limits.</span>
+              <span className="gradient-text-hover animate-gradient-shift">Live Without Limits.</span>
               <motion.svg
                 initial={{ pathLength: 0, opacity: 0 }}
                 animate={{ pathLength: 1, opacity: 1 }}
@@ -103,10 +104,13 @@ export function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground text-pretty sm:text-lg"
+            className="group mt-7 max-w-xl text-base leading-relaxed text-muted-foreground text-pretty sm:text-lg"
           >
             Knee, back & neck pain, sports injuries, ACL rehab and home visits across{" "}
-            <span className="font-semibold text-foreground">Kopar Khairane & Ghansoli, Navi Mumbai</span>.
+            <span className="font-semibold text-foreground text-interactive-teal cursor-default transition-colors">
+              Kopar Khairane & Ghansoli, Navi Mumbai
+            </span>
+            .
           </motion.p>
 
           <motion.div
@@ -116,10 +120,12 @@ export function Hero() {
             className="mt-8 flex flex-wrap items-center gap-3"
           >
             <Magnetic>
-              <Button asChild size="lg" className="gap-2 rounded-xl shadow-glow-royal">
+              <Button asChild size="lg" className="group relative gap-2 overflow-hidden rounded-xl shadow-glow-royal">
                 <a href="#appointment">
-                  <Calendar className="h-4 w-4" />
-                  Book Appointment
+                  {/* Shimmer sweep on hover */}
+                  <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                  <Calendar className="h-4 w-4 relative" />
+                  <span className="relative">Book Appointment</span>
                 </a>
               </Button>
             </Magnetic>
@@ -153,20 +159,20 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
             className="mt-12 grid max-w-xl grid-cols-3 gap-4 border-t border-border/60 pt-7"
           >
-            <div>
-              <div className="font-heading text-2xl font-bold text-foreground sm:text-3xl">
+            <div className="group cursor-default transition-transform hover:-translate-y-1">
+              <div className="text-interactive font-heading text-2xl font-bold sm:text-3xl">
                 <Counter to={155} suffix="+" />
               </div>
               <div className="mt-1 text-xs font-medium text-muted-foreground sm:text-sm">Happy Patients</div>
             </div>
-            <div>
-              <div className="font-heading text-2xl font-bold text-foreground sm:text-3xl">
+            <div className="group cursor-default transition-transform hover:-translate-y-1">
+              <div className="text-interactive-teal font-heading text-2xl font-bold sm:text-3xl">
                 <Counter to={4.9} decimals={1} suffix="★" />
               </div>
               <div className="mt-1 text-xs font-medium text-muted-foreground sm:text-sm">Google Rating</div>
             </div>
-            <div>
-              <div className="font-heading text-2xl font-bold text-foreground sm:text-3xl">
+            <div className="group cursor-default transition-transform hover:-translate-y-1">
+              <div className="text-interactive-healing font-heading text-2xl font-bold sm:text-3xl">
                 <Counter to={24} suffix="/7" />
               </div>
               <div className="mt-1 text-xs font-medium text-muted-foreground sm:text-sm">Availability</div>
@@ -266,9 +272,9 @@ export function Hero() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="flex items-center gap-2"
+              className="group flex items-center gap-2 transition-colors hover:text-foreground"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-healing" />
+              <span className="h-1.5 w-1.5 rounded-full bg-healing animate-pulse-dot" style={{ animationDelay: `${i * 0.3}s` }} />
               {t}
             </motion.span>
           ))}
