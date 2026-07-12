@@ -16,13 +16,14 @@ import {
   Scale,
   Disc3,
   PersonStanding,
+  Trophy,
   type LucideIcon,
 } from "lucide-react";
 
 // Map our icon keys to actual Lucide icons.
 // Where Lucide lacks a domain icon, we substitute a sensible one.
 export const ICON_MAP: Record<string, LucideIcon> = {
-  // Specializations
+  // Specializations & conditions
   Bone,
   Activity,
   Disc: Disc3,
@@ -32,11 +33,13 @@ export const ICON_MAP: Record<string, LucideIcon> = {
   Nerve: Activity,
   Muscle: Activity,
   Joint: Bone,
+  Spine: Bone,
   Scale,
   Posture: PersonStanding,
   Elderly: HeartHandshake,
   Home,
   HeartPulse,
+  Trophy,
 
   // Why choose
   UserCheck,

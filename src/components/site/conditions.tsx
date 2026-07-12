@@ -5,6 +5,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { SectionWrap, SectionHeading } from "@/components/site/reveal";
+import { Icon } from "@/components/site/icon";
 import { CONDITIONS } from "@/lib/site/data";
 import { cn } from "@/lib/utils";
 
@@ -96,20 +97,26 @@ export function Conditions() {
                   <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-gradient-to-br from-royal/10 to-teal/10 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
 
                   <div className="flex items-start justify-between">
-                    <span className="font-heading text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
+                    {/* Gradient icon tile */}
+                    <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-royal to-teal text-white shadow-lg">
+                      <Icon name={c.icon} className="h-6 w-6" />
+                    </div>
                     <span className="grid h-9 w-9 place-items-center rounded-full border border-border/70 bg-background/60 text-muted-foreground transition-all group-hover:border-primary/40 group-hover:bg-primary/10 group-hover:text-primary">
                       <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </span>
                   </div>
 
-                  <h3 className="mt-auto font-heading text-xl font-bold leading-tight text-foreground sm:text-2xl">
-                    {c.title}
-                  </h3>
-                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                    View treatment approach
-                  </span>
+                  <div className="mt-auto">
+                    <span className="font-heading text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="mt-1 font-heading text-xl font-bold leading-tight text-foreground sm:text-2xl">
+                      {c.title}
+                    </h3>
+                    <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                      View treatment approach
+                    </span>
+                  </div>
                 </motion.a>
               </div>
             ))}

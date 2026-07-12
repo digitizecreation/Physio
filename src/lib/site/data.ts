@@ -211,20 +211,20 @@ export const REVIEWS = [
 
 
 export const CONDITIONS = [
-  { title: "Back Pain", color: "from-royal/15 to-teal/10" },
-  { title: "Neck Pain", color: "from-teal/15 to-healing/10" },
-  { title: "Joint Pain", color: "from-healing/15 to-royal/10" },
-  { title: "ACL Injury", color: "from-royal/15 to-healing/10" },
-  { title: "Meniscus Tear", color: "from-teal/15 to-royal/10" },
-  { title: "Sports Injury", color: "from-healing/15 to-teal/10" },
-  { title: "Frozen Shoulder", color: "from-royal/15 to-teal/10" },
-  { title: "Arthritis", color: "from-teal/15 to-healing/10" },
-  { title: "Sciatica", color: "from-healing/15 to-royal/10" },
-  { title: "Slip Disc", color: "from-royal/15 to-healing/10" },
-  { title: "Muscle Tightness", color: "from-teal/15 to-royal/10" },
-  { title: "Post Surgical Rehab", color: "from-healing/15 to-teal/10" },
-  { title: "Posture Issues", color: "from-royal/15 to-teal/10" },
-  { title: "Senior Mobility", color: "from-teal/15 to-healing/10" },
+  { title: "Back Pain", icon: "Spine", color: "from-royal/15 to-teal/10" },
+  { title: "Neck Pain", icon: "Neck", color: "from-teal/15 to-healing/10" },
+  { title: "Joint Pain", icon: "Bone", color: "from-healing/15 to-royal/10" },
+  { title: "ACL Injury", icon: "Activity", color: "from-royal/15 to-healing/10" },
+  { title: "Meniscus Tear", icon: "Disc", color: "from-teal/15 to-royal/10" },
+  { title: "Sports Injury", icon: "Trophy", color: "from-healing/15 to-teal/10" },
+  { title: "Frozen Shoulder", icon: "Shoulder", color: "from-royal/15 to-teal/10" },
+  { title: "Arthritis", icon: "Bone", color: "from-teal/15 to-healing/10" },
+  { title: "Sciatica", icon: "Nerve", color: "from-healing/15 to-royal/10" },
+  { title: "Slip Disc", icon: "Disc", color: "from-royal/15 to-healing/10" },
+  { title: "Muscle Tightness", icon: "Muscle", color: "from-teal/15 to-royal/10" },
+  { title: "Post Surgical Rehab", icon: "HeartPulse", color: "from-healing/15 to-teal/10" },
+  { title: "Posture Issues", icon: "Posture", color: "from-royal/15 to-teal/10" },
+  { title: "Senior Mobility", icon: "Elderly", color: "from-teal/15 to-healing/10" },
 ] as const;
 
 export const HOME_VISIT_BENEFITS = [

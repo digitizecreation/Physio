@@ -17,16 +17,6 @@ const gradients = [
   "from-healing to-teal",
 ];
 
-// Soft background tints for cards
-const tints = [
-  "group-hover:from-royal/8 group-hover:to-teal/4",
-  "group-hover:from-teal/8 group-hover:to-healing/4",
-  "group-hover:from-healing/8 group-hover:to-royal/4",
-  "group-hover:from-royal/8 group-hover:to-healing/4",
-  "group-hover:from-teal/8 group-hover:to-royal/4",
-  "group-hover:from-healing/8 group-hover:to-teal/4",
-];
-
 export function Specializations() {
   return (
     <SectionWrap id="specializations" className="relative overflow-hidden">
@@ -42,38 +32,36 @@ export function Specializations() {
         description="From acute sports injuries to chronic arthritis — each treated with a structured, evidence-based protocol."
       />
 
-      <StaggerGroup className="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Compact grid: 2 cols on mobile, 3 on tablet, 6 on desktop — keeps all 18 visible without scrolling fatigue */}
+      <StaggerGroup className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 lg:gap-4">
         {SPECIALIZATIONS.map((s, i) => (
           <StaggerItem key={s.title}>
             <motion.a
               href="#appointment"
               whileHover={{ y: -6 }}
               transition={{ type: "spring", stiffness: 280, damping: 20 }}
-              className={`group relative flex h-full items-center gap-4 overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-card/80 to-card/40 p-5 backdrop-blur transition-colors hover:border-primary/40 ${tints[i % tints.length]} sm:p-6`}
+              className="group relative flex h-full flex-col items-start overflow-hidden rounded-2xl border border-border/60 bg-card/70 p-4 backdrop-blur transition-colors hover:border-primary/40"
             >
               {/* Decorative glow blob */}
               <div
-                className={`pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-gradient-to-br ${gradients[i % gradients.length]} opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-20`}
+                className={`pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gradient-to-br ${gradients[i % gradients.length]} opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-20`}
               />
 
               {/* Gradient icon tile */}
-              <div className={`relative grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br ${gradients[i % gradients.length]} text-white shadow-lg`}>
-                <Icon name={s.icon} className="h-6 w-6" />
-                <span className="absolute -bottom-1 -right-1 grid h-5 w-5 place-items-center rounded-full border-2 border-card bg-card text-[9px] font-bold text-muted-foreground">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+              <div className={`relative grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br ${gradients[i % gradients.length]} text-white shadow-md`}>
+                <Icon name={s.icon} className="h-5 w-5" />
               </div>
 
-              {/* Title + CTA */}
-              <div className="relative min-w-0 flex-1">
-                <h3 className="font-heading text-base font-bold leading-tight text-foreground sm:text-lg">
-                  {s.title}
-                </h3>
-                <span className="mt-1.5 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors group-hover:text-primary">
-                  Learn more
-                  <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </span>
-              </div>
+              {/* Title */}
+              <h3 className="mt-3 font-heading text-sm font-bold leading-tight text-foreground">
+                {s.title}
+              </h3>
+
+              {/* Learn more */}
+              <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground transition-colors group-hover:text-primary">
+                Learn more
+                <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </span>
             </motion.a>
           </StaggerItem>
         ))}

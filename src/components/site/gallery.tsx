@@ -62,10 +62,10 @@ export function Gallery() {
   }, [open, close, next, prev]);
 
   return (
-    <SectionWrap id="gallery" className="relative overflow-hidden">
-      <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
+    <SectionWrap id="gallery" className="relative overflow-visible">
+      <div className="grid gap-8 lg:grid-cols-[0.7fr_1fr] lg:gap-10">
         {/* Sticky heading — left column on desktop */}
-        <div className="lg:sticky lg:top-28 lg:self-start">
+        <div className="lg:sticky lg:top-28 lg:self-start lg:max-w-sm">
           <SectionHeading
             align="left"
             eyebrow="Inside the Practice"
@@ -86,7 +86,7 @@ export function Gallery() {
         </div>
 
         {/* Uniform gallery grid — right column on desktop */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
           {SHOTS.map((s, i) => (
             <Reveal key={s.id} delay={(i % 3) * 0.05}>
               <motion.button
