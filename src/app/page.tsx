@@ -16,6 +16,7 @@ import { Appointment } from "@/components/site/appointment";
 import { Contact } from "@/components/site/contact";
 import { Footer } from "@/components/site/footer";
 import { FloatingActions } from "@/components/site/floating-actions";
+import { ChatBot } from "@/components/site/chatbot";
 import { LoadingScreen } from "@/components/site/loading-screen";
 
 export default function Home() {
@@ -42,6 +43,7 @@ export default function Home() {
       </main>
       <Footer />
       <FloatingActions />
+      <ChatBot />
     </>
   );
 }
