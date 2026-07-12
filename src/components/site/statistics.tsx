@@ -2,27 +2,25 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { Clock, Heart, Users } from "lucide-react";
+import { Clock, Heart } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { SectionWrap } from "@/components/site/reveal";
 import { Counter } from "@/components/site/motion";
 import { GoogleG, GoogleStar } from "@/components/site/google-brand";
 
 type StatItem = {
-  icon: LucideIcon;
+  icon?: LucideIcon;
   value: number;
   decimals?: number;
   suffix: string;
   label: string;
   sub: string;
   color: string;
-  // Optional: use Google branding instead of the Lucide icon
   googleIcon?: "G" | "star";
 };
 
 const items: StatItem[] = [
   {
-    icon: Users,
     value: 155,
     suffix: "+",
     label: "Google Reviews",
@@ -31,7 +29,6 @@ const items: StatItem[] = [
     googleIcon: "G",
   },
   {
-    icon: Users, // fallback, not rendered when googleIcon is set
     value: 4.9,
     decimals: 1,
     suffix: "★",
@@ -88,9 +85,9 @@ export function Statistics() {
                   <GoogleG className="h-6 w-6" />
                 ) : it.googleIcon === "star" ? (
                   <GoogleStar className="h-6 w-6" />
-                ) : (
+                ) : it.icon ? (
                   <it.icon className="h-5 w-5" />
-                )}
+                ) : null}
               </div>
               <div className="font-heading text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
                 <Counter to={it.value} decimals={it.decimals ?? 0} suffix={it.suffix} />

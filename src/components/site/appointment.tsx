@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
-import { Calendar, Clock, User, Phone, MessageCircle, MapPin, Mail, Send, CheckCircle2, Loader2, Home, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Calendar, Clock, User, Phone, MessageCircle, MapPin, Mail, Send, CheckCircle2, Loader2, Home, ChevronRight, X, Shield } from "lucide-react";
 import { SectionWrap, SectionHeading, Reveal } from "@/components/site/reveal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,6 +38,8 @@ export function Appointment() {
   const [submitting, setSubmitting] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
   const [today, setToday] = React.useState<string>("");
+  const [showPrivacy, setShowPrivacy] = React.useState(false);
+  const [form, setForm] = React.useState({ name: "", phone: "", notes: "" });
 
   React.useEffect(() => {
     setToday(new Date().toISOString().split("T")[0]);
@@ -184,7 +186,7 @@ export function Appointment() {
                       </Label>
                       <div className="relative mt-1.5">
                         <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                        <Input id="name" required maxLength={80} placeholder="Your name" className="pl-9" />
+                        <Input id="name" required maxLength={80} placeholder="Your name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className="pl-9" />
                       </div>
                     </div>
                     <div>
@@ -193,7 +195,7 @@ export function Appointment() {
                       </Label>
                       <div className="relative mt-1.5">
                         <Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                        <Input id="phone" required type="tel" maxLength={15} pattern="[+]?[0-9\s-]{8,15}" placeholder="e.g. +91 98765 43210" className="pl-9" />
+                        <Input id="phone" required type="tel" maxLength={15} pattern="[+]?[0-9\s-]{8,15}" placeholder="e.g. +91 98765 43210" value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} className="pl-9" />
                       </div>
                     </div>
                   </div>
@@ -313,6 +315,8 @@ export function Appointment() {
                       rows={3}
                       maxLength={500}
                       placeholder="Briefly describe your symptoms..."
+                      value={form.notes}
+                      onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
                       className="mt-1.5 resize-none"
                     />
                   </div>
@@ -328,9 +332,9 @@ export function Appointment() {
                     />
                     <span>
                       I agree to be contacted about my appointment and accept the{" "}
-                      <a href="#privacy" onClick={(e) => { e.preventDefault(); }} className="font-semibold text-primary underline">
+                      <button type="button" onClick={() => setShowPrivacy(true)} className="font-semibold text-primary underline">
                         Privacy Policy
-                      </a>
+                      </button>
                       . My data will be used solely for scheduling and treatment.
                     </span>
                   </label>
@@ -369,7 +373,100 @@ export function Appointment() {
           </Reveal>
         </div>
       </div>
+
+      <PrivacyDialog open={showPrivacy} onClose={() => setShowPrivacy(false)} />
     </SectionWrap>
+  );
+}
+
+function PrivacyDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const dialogRef = React.useRef<HTMLDivElement>(null);
+  const closeBtnRef = React.useRef<HTMLButtonElement>(null);
+
+  React.useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "Tab" && dialogRef.current) {
+        const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+          'a, button, [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    requestAnimationFrame(() => closeBtnRef.current?.focus());
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open, onClose]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-background/80 backdrop-blur-md p-4"
+          onClick={onClose}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Privacy Policy"
+        >
+          <motion.div
+            ref={dialogRef}
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 280, damping: 24 }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-border/60 bg-card p-6 shadow-premium sm:p-8"
+          >
+            <div className="mb-5 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="grid h-10 w-10 place-items-center rounded-xl gradient-royal-teal text-white">
+                  <Shield className="h-5 w-5" />
+                </div>
+                <h2 className="font-heading text-xl font-bold text-foreground">Privacy Policy</h2>
+              </div>
+              <button
+                ref={closeBtnRef}
+                onClick={onClose}
+                aria-label="Close"
+                className="grid h-9 w-9 place-items-center rounded-lg border border-border/70 text-foreground transition-colors hover:bg-accent/20"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
+              <p className="font-semibold text-foreground">Last updated: July 2025</p>
+              <p>
+                Dr. Samrudhhi A. Mane (&ldquo;we&rdquo;) collects your name, phone number, and optional symptom notes solely to schedule and provide physiotherapy appointments. We do not sell or share your data with third parties for marketing.
+              </p>
+              <p>
+                Under the Digital Personal Data Protection Act, 2023 (DPDP Act), you have the right to access, correct, or delete your personal data. Contact us at {BUSINESS.email} or {BUSINESS.phone} to exercise these rights.
+              </p>
+              <p>
+                This website uses local storage only for your theme preference. No tracking cookies or analytics scripts are used.
+              </p>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 

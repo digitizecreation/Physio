@@ -24,7 +24,7 @@ export function Conditions() {
 
   React.useEffect(() => {
     if (!embla) return;
-    const denoise = embla.on("select", onSelect);
+    const denoise = embla.on("select", onSelect) as unknown as (() => void) | undefined;
     onSelect();
     return () => denoise?.();
   }, [embla, onSelect]);
@@ -45,7 +45,13 @@ export function Conditions() {
   React.useEffect(() => {
     if (!embla) return;
     startAutoplay();
-    return stopAutoplay;
+    // Pause autoplay when tab is hidden, resume when visible
+    const onVis = () => (document.hidden ? stopAutoplay() : startAutoplay());
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      stopAutoplay();
+      document.removeEventListener("visibilitychange", onVis);
+    };
   }, [embla, startAutoplay, stopAutoplay]);
 
   return (

@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 /**
  * Official Google brand assets as inline SVG components.
  * Used consistently across the site for Google reviews, ratings, and badges.
@@ -34,10 +36,11 @@ export function GoogleG({ className }: { className?: string }) {
  * Uses Google's official review star color (#FBBC05 — Google Yellow).
  * Filled 5-point star, same shape Google uses in its review displays.
  */
-export function GoogleStar({ className }: { className?: string }) {
+export function GoogleStar({ className, style }: { className?: string; style?: CSSProperties }) {
   return (
     <svg
       className={className}
+      style={style}
       viewBox="0 0 24 24"
       aria-hidden
       focusable="false"

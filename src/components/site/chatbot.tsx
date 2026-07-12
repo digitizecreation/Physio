@@ -52,7 +52,6 @@ export function ChatBot() {
   const [messages, setMessages] = React.useState<Message[]>([INITIAL_MESSAGE]);
   const [input, setInput] = React.useState("");
   const [isTyping, setIsTyping] = React.useState(false);
-  const [hasNewMessage, setHasNewMessage] = React.useState(false);
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const launcherRef = React.useRef<HTMLButtonElement>(null);
@@ -91,29 +90,17 @@ export function ChatBot() {
       }
     };
     document.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    requestAnimationFrame(() => closeBtnRef.current?.focus());
+    requestAnimationFrame(() => inputRef.current?.focus());
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
     };
   }, [open]);
 
-  // Show a "new message" pulse after 3 seconds if user hasn't opened the chat
-  React.useEffect(() => {
-    if (open) {
-      setHasNewMessage(false);
-      return;
-    }
-    const t = setTimeout(() => setHasNewMessage(true), 4000);
-    return () => clearTimeout(t);
-  }, [open]);
-
   const addMessage = (msg: Omit<Message, "id">) => {
-    setMessages((prev) => [...prev, { ...msg, id: `${Date.now()}-${Math.random()}` }]);
+    setMessages((prev) => [...prev, { ...msg, id: `${Date.now()}-${Math.random()}` }].slice(-50));
   };
 
-  const getBotResponse = (action: string): Message => {
+  const getBotResponse = (action: string): Omit<Message, "id"> => {
     // FAQ match
     if (action.startsWith("faq-")) {
       const idx = parseInt(action.replace("faq-", ""));
@@ -153,22 +140,12 @@ export function ChatBot() {
           text: "Open WhatsApp to chat with Dr. Samrudhhi directly.",
           chips: [{ label: "Open WhatsApp", action: "wa-link" }],
         };
-      case "scroll-form":
-        return {
-          role: "bot",
-          text: "Scrolling you to the appointment form...",
-          chips: [],
-        };
       case "more":
         return {
           role: "bot",
           text: "What else can I help with? Here are some common questions:",
           chips: QUICK_REPLIES,
         };
-      case "tel":
-        return { role: "bot", text: `Opening your phone dialer...`, chips: [] };
-      case "wa-link":
-        return { role: "bot", text: "Opening WhatsApp...", chips: [] };
       case "cost":
         return {
           role: "bot",
@@ -209,10 +186,6 @@ export function ChatBot() {
             { label: "WhatsApp", action: "whatsapp" },
           ],
         };
-      case "scroll-faq":
-        return { role: "bot", text: "Scrolling you to the FAQ section...", chips: [] };
-      case "maps":
-        return { role: "bot", text: "Opening Google Maps...", chips: [] };
       default:
         return { role: "bot", text: "How else can I help?", chips: QUICK_REPLIES };
     }
@@ -301,8 +274,8 @@ export function ChatBot() {
 
   return (
     <>
-      {/* Floating launcher button */}
-      <div className="fixed bottom-5 left-4 z-50 sm:bottom-6 sm:left-6">
+      {/* Floating launcher button — lifted above sticky CTA on mobile */}
+      <div className="fixed bottom-20 left-4 z-50 sm:bottom-6 sm:left-6">
         <motion.button
           ref={launcherRef}
           aria-label={open ? "Close chat" : "Open chat assistant"}
@@ -338,18 +311,9 @@ export function ChatBot() {
               </motion.span>
             )}
           </AnimatePresence>
-          {/* Pulse ring when closed */}
+          {/* Subtle pulse ring when closed to draw attention */}
           {!open && (
             <span className="absolute inset-0 -z-10 animate-pulse-ring rounded-full" />
-          )}
-          {/* New message indicator */}
-          {hasNewMessage && !open && (
-            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-healing opacity-60" />
-              <span className="relative inline-flex h-4 w-4 items-center justify-center rounded-full bg-healing text-[9px] font-bold text-white">
-                1
-              </span>
-            </span>
           )}
         </motion.button>
       </div>
@@ -363,7 +327,7 @@ export function ChatBot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 280, damping: 26 }}
-            className="fixed bottom-24 left-4 z-50 flex h-[min(560px,75vh)] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-3xl border border-border/60 bg-card shadow-premium sm:left-6"
+            className="fixed bottom-40 left-4 z-50 flex h-[min(560px,60vh)] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-3xl border border-border/60 bg-card shadow-premium sm:bottom-24 sm:left-6"
             role="dialog"
             aria-modal="true"
             aria-label="Chat assistant"
@@ -439,6 +403,9 @@ export function ChatBot() {
               <p className="mt-2 flex items-center justify-center gap-1 text-[10px] text-muted-foreground">
                 <Phone className="h-2.5 w-2.5" />
                 Or call <a href={BUSINESS.phoneHref} className="font-semibold text-primary">{BUSINESS.phone}</a>
+              </p>
+              <p className="mt-1 text-center text-[10px] text-muted-foreground">
+                Please don't share personal or medical details here — call or WhatsApp us instead.
               </p>
             </div>
           </motion.div>

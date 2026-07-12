@@ -25,8 +25,8 @@ export function FloatingActions() {
         aria-hidden
       />
 
-      {/* Floating right cluster (desktop + mobile) */}
-      <div className="fixed bottom-5 right-4 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
+      {/* Floating right cluster (desktop only — mobile uses sticky CTA bar) */}
+      <div className="fixed bottom-5 right-4 z-50 hidden flex-col items-end gap-3 sm:flex sm:bottom-6 sm:right-6">
         <AnimatePresence>
           {showTop && (
             <motion.button
