@@ -1,9 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { Activity, Phone, MessageCircle, MapPin, Clock, Mail, Star, Heart, X, Shield, FileText } from "lucide-react";
+import { Activity, Phone, MessageCircle, MapPin, Clock, Mail, Heart, X, Shield, FileText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BUSINESS, SPECIALIZATIONS } from "@/lib/site/data";
+import { GoogleG, GoogleStar } from "@/components/site/google-brand";
 
 const quickLinks = [
   { href: "#about", label: "About Dr. Samrudhhi" },
@@ -59,7 +60,8 @@ export function Footer() {
 
             <div className="mt-5 flex items-center gap-3">
               <div className="flex items-center gap-1.5 rounded-full border border-border/60 bg-card/70 px-3 py-1.5 text-xs font-semibold text-foreground backdrop-blur">
-                <Star className="h-3.5 w-3.5 fill-healing text-healing" />
+                <GoogleG className="h-3.5 w-3.5" />
+                <GoogleStar className="h-3.5 w-3.5" />
                 4.9 / 5
                 <span className="text-muted-foreground">• 155+</span>
               </div>

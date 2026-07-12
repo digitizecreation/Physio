@@ -2,10 +2,11 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { Phone, MessageCircle, Calendar, Star, Activity, HeartPulse, Stethoscope, Bone, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
+import { Phone, MessageCircle, Calendar, Activity, HeartPulse, Stethoscope, Bone, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BUSINESS } from "@/lib/site/data";
 import { Counter, Magnetic } from "@/components/site/motion";
+import { GoogleG, GoogleStar } from "@/components/site/google-brand";
 
 const floatingIcons = [
   { Icon: HeartPulse, x: "8%", y: "22%", delay: 0, color: "text-healing" },
@@ -56,9 +57,10 @@ export function Hero() {
             whileHover={{ scale: 1.03 }}
             className="group inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/70 px-3.5 py-1.5 text-xs font-semibold text-foreground backdrop-blur transition-colors hover:border-healing/40"
           >
-            <span className="flex -space-x-1">
+            <GoogleG className="h-3.5 w-3.5" />
+            <span className="flex -space-x-0.5">
               {[0, 1, 2, 3, 4].map((i) => (
-                <Star key={i} className="h-3 w-3 fill-healing text-healing transition-transform group-hover:scale-110" style={{ transitionDelay: `${i * 40}ms` }} />
+                <GoogleStar key={i} className="h-3 w-3 transition-transform group-hover:scale-110" style={{ transitionDelay: `${i * 40}ms` }} />
               ))}
             </span>
             <span className="text-muted-foreground">

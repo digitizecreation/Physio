@@ -2,11 +2,25 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { Star, Clock, Heart, Users } from "lucide-react";
+import { Clock, Heart, Users } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { SectionWrap } from "@/components/site/reveal";
 import { Counter } from "@/components/site/motion";
+import { GoogleG, GoogleStar } from "@/components/site/google-brand";
 
-const items = [
+type StatItem = {
+  icon: LucideIcon;
+  value: number;
+  decimals?: number;
+  suffix: string;
+  label: string;
+  sub: string;
+  color: string;
+  // Optional: use Google branding instead of the Lucide icon
+  googleIcon?: "G" | "star";
+};
+
+const items: StatItem[] = [
   {
     icon: Users,
     value: 155,
@@ -14,15 +28,17 @@ const items = [
     label: "Google Reviews",
     sub: "From real, verified patients",
     color: "from-royal to-teal",
+    googleIcon: "G",
   },
   {
-    icon: Star,
+    icon: Users, // fallback, not rendered when googleIcon is set
     value: 4.9,
     decimals: 1,
     suffix: "★",
     label: "Average Rating",
     sub: "Across all review platforms",
     color: "from-teal to-healing",
+    googleIcon: "star",
   },
   {
     icon: Clock,
@@ -68,7 +84,13 @@ export function Statistics() {
               className="group relative text-center sm:text-left"
             >
               <div className={`mb-4 inline-grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br ${it.color} text-white shadow-lg`}>
-                <it.icon className="h-5 w-5" />
+                {it.googleIcon === "G" ? (
+                  <GoogleG className="h-6 w-6" />
+                ) : it.googleIcon === "star" ? (
+                  <GoogleStar className="h-6 w-6" />
+                ) : (
+                  <it.icon className="h-5 w-5" />
+                )}
               </div>
               <div className="font-heading text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
                 <Counter to={it.value} decimals={it.decimals ?? 0} suffix={it.suffix} />

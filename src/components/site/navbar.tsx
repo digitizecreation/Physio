@@ -2,12 +2,13 @@
 
 import * as React from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { Menu, X, Phone, Star, Moon, Sun, Activity } from "lucide-react";
+import { Menu, X, Phone, Moon, Sun, Activity } from "lucide-react";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { BUSINESS, NAV_LINKS } from "@/lib/site/data";
 import { Magnetic } from "@/components/site/motion";
+import { GoogleG, GoogleStar } from "@/components/site/google-brand";
 
 export function Navbar() {
   const [open, setOpen] = React.useState(false);
@@ -214,7 +215,8 @@ export function Navbar() {
               </div>
               <div className="mt-6 rounded-xl border border-border/70 bg-secondary/50 p-4 text-sm">
                 <div className="flex items-center gap-2">
-                  <Star className="h-4 w-4 fill-healing text-healing" />
+                  <GoogleG className="h-4 w-4" />
+                  <GoogleStar className="h-4 w-4" />
                   <span className="font-semibold">4.9 / 5</span>
                   <span className="text-muted-foreground">• 155+ reviews</span>
                 </div>
