@@ -126,6 +126,7 @@ export function Contact() {
               src={BUSINESS.mapsEmbed}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
+              sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
               className="absolute inset-0 h-full w-full"
               style={{ border: 0 }}
               allowFullScreen

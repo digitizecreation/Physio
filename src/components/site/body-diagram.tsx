@@ -148,7 +148,6 @@ export function BodyDiagram() {
                     <g
                       key={p.id}
                       onClick={() => setActive(p)}
-                      onMouseEnter={() => {}}
                       className="cursor-pointer"
                       role="button"
                       tabIndex={0}

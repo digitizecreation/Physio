@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, Phone, Star, Moon, Sun, Activity } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -18,6 +17,10 @@ export function Navbar() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
+  const drawerRef = React.useRef<HTMLDivElement>(null);
+  const closeButtonRef = React.useRef<HTMLButtonElement>(null);
+  const menuButtonRef = React.useRef<HTMLButtonElement>(null);
+
   React.useEffect(() => setMounted(true), []);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -26,6 +29,44 @@ export function Navbar() {
     if (latest > prev && latest > 240 && !open) setHidden(true);
     else setHidden(false);
   });
+
+  // Drawer: ESC, scroll lock, focus management
+  React.useEffect(() => {
+    if (!open) return;
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        menuButtonRef.current?.focus();
+      }
+      // Focus trap
+      if (e.key === "Tab" && drawerRef.current) {
+        const focusable = drawerRef.current.querySelectorAll<HTMLElement>(
+          'a, button, [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    // Move focus into drawer
+    requestAnimationFrame(() => closeButtonRef.current?.focus());
+
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
     <>
@@ -44,7 +85,7 @@ export function Navbar() {
           )}
         >
           {/* Logo */}
-          <Link href="#top" className="flex items-center gap-2.5">
+          <a href="#top" className="flex items-center gap-2.5">
             <span className="relative grid h-10 w-10 place-items-center rounded-xl gradient-royal-teal text-white shadow-glow-royal">
               <Activity className="h-5 w-5" />
               <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-healing ring-2 ring-background" />
@@ -57,19 +98,19 @@ export function Navbar() {
                 Physiotherapist • Navi Mumbai
               </div>
             </div>
-          </Link>
+          </a>
 
           {/* Desktop links */}
           <div className="hidden items-center gap-1 lg:flex">
             {NAV_LINKS.map((l) => (
-              <Link
+              <a
                 key={l.href}
                 href={l.href}
                 className="group relative rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 {l.label}
                 <span className="absolute inset-x-3 -bottom-0.5 h-0.5 origin-left scale-x-0 rounded-full gradient-royal-teal transition-transform duration-300 group-hover:scale-x-100" />
-              </Link>
+              </a>
             ))}
           </div>
 
@@ -81,15 +122,18 @@ export function Navbar() {
               <span className="text-muted-foreground">• 155+</span>
             </div>
 
-            {mounted && (
-              <button
-                aria-label="Toggle theme"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="grid h-10 w-10 place-items-center rounded-xl border border-border/70 bg-card/60 text-foreground transition-colors hover:bg-accent/20"
-              >
-                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </button>
-            )}
+            {/* Theme toggle — reserve space to prevent CLS */}
+            <button
+              aria-label="Toggle theme"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="grid h-10 w-10 place-items-center rounded-xl border border-border/70 bg-card/60 text-foreground transition-colors hover:bg-accent/20"
+            >
+              {mounted ? (
+                theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4 opacity-0" />
+              )}
+            </button>
 
             <Magnetic className="hidden sm:block">
               <Button asChild size="sm" className="gap-2 rounded-xl">
@@ -101,7 +145,9 @@ export function Navbar() {
             </Magnetic>
 
             <button
+              ref={menuButtonRef}
               aria-label="Toggle menu"
+              aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
               className="grid h-10 w-10 place-items-center rounded-xl border border-border/70 bg-card/60 text-foreground lg:hidden"
             >
@@ -120,12 +166,16 @@ export function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-40 lg:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
           >
             <div
               className="absolute inset-0 bg-background/60 backdrop-blur-sm"
               onClick={() => setOpen(false)}
             />
             <motion.div
+              ref={drawerRef}
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -135,28 +185,26 @@ export function Navbar() {
               <div className="mb-4 flex items-center justify-between">
                 <span className="font-heading text-base font-bold">Menu</span>
                 <button
+                  ref={closeButtonRef}
                   aria-label="Close menu"
-                  onClick={() => setOpen(false)}
+                  onClick={() => {
+                    setOpen(false);
+                    menuButtonRef.current?.focus();
+                  }}
                   className="grid h-9 w-9 place-items-center rounded-lg border border-border/70"
                 >
                   <X className="h-4 w-4" />
                 </button>
               </div>
-              {NAV_LINKS.map((l, i) => (
-                <motion.div
+              {NAV_LINKS.map((l) => (
+                <a
                   key={l.href}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.04 * i }}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  className="block rounded-xl px-4 py-3 text-base font-medium text-foreground transition-colors hover:bg-accent/15"
                 >
-                  <Link
-                    href={l.href}
-                    onClick={() => setOpen(false)}
-                    className="block rounded-xl px-4 py-3 text-base font-medium text-foreground transition-colors hover:bg-accent/15"
-                  >
-                    {l.label}
-                  </Link>
-                </motion.div>
+                  {l.label}
+                </a>
               ))}
               <div className="mt-4 flex flex-col gap-2">
                 <Button asChild className="gap-2">

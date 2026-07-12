@@ -31,28 +31,24 @@ export const BUSINESS = {
   googlePlacesUri:
     "https://maps.google.com/?cid=2265102277036777400",
   email: "care@drsamrudhhimane.in",
-  social: {
-    google:
-      "https://maps.google.com/?cid=2265102277036777400",
-  },
 };
 
 
 export const SPECIALIZATIONS = [
-  { title: "Knee Pain", icon: "Knee" },
+  { title: "Knee Pain", icon: "Bone" },
   { title: "ACL Rehabilitation", icon: "Activity" },
-  { title: "Meniscus Rehabilitation", icon: "Bone" },
+  { title: "Meniscus Rehabilitation", icon: "Disc" },
   { title: "Slip Disc", icon: "Disc" },
   { title: "Neck Pain", icon: "Neck" },
   { title: "Cervical Pain", icon: "Cervical" },
   { title: "Frozen Shoulder", icon: "Shoulder" },
   { title: "Shoulder Pain", icon: "Shoulder" },
-  { title: "Arthritis", icon: "Bone" },
+  { title: "Arthritis", icon: "Joint" },
   { title: "Sciatica", icon: "Nerve" },
   { title: "Sports Injury", icon: "Activity" },
   { title: "Post Surgery Rehabilitation", icon: "HeartPulse" },
   { title: "Muscle Pain", icon: "Muscle" },
-  { title: "Joint Pain", icon: "Bone" },
+  { title: "Joint Pain", icon: "Joint" },
   { title: "Balance Training", icon: "Scale" },
   { title: "Posture Correction", icon: "Posture" },
   { title: "Elderly Physiotherapy", icon: "Elderly" },
@@ -215,20 +211,20 @@ export const REVIEWS = [
 
 
 export const CONDITIONS = [
-  { title: "Back Pain", body: "back", color: "from-royal/15 to-teal/10" },
-  { title: "Neck Pain", body: "neck", color: "from-teal/15 to-healing/10" },
-  { title: "Joint Pain", body: "knee", color: "from-healing/15 to-royal/10" },
-  { title: "ACL Injury", body: "knee", color: "from-royal/15 to-healing/10" },
-  { title: "Meniscus Tear", body: "knee", color: "from-teal/15 to-royal/10" },
-  { title: "Sports Injury", body: "shoulder", color: "from-healing/15 to-teal/10" },
-  { title: "Frozen Shoulder", body: "shoulder", color: "from-royal/15 to-teal/10" },
-  { title: "Arthritis", body: "knee", color: "from-teal/15 to-healing/10" },
-  { title: "Sciatica", body: "back", color: "from-healing/15 to-royal/10" },
-  { title: "Slip Disc", body: "back", color: "from-royal/15 to-healing/10" },
-  { title: "Muscle Tightness", body: "shoulder", color: "from-teal/15 to-royal/10" },
-  { title: "Post Surgical Rehab", body: "knee", color: "from-healing/15 to-teal/10" },
-  { title: "Posture Issues", body: "neck", color: "from-royal/15 to-teal/10" },
-  { title: "Senior Mobility", body: "back", color: "from-teal/15 to-healing/10" },
+  { title: "Back Pain", color: "from-royal/15 to-teal/10" },
+  { title: "Neck Pain", color: "from-teal/15 to-healing/10" },
+  { title: "Joint Pain", color: "from-healing/15 to-royal/10" },
+  { title: "ACL Injury", color: "from-royal/15 to-healing/10" },
+  { title: "Meniscus Tear", color: "from-teal/15 to-royal/10" },
+  { title: "Sports Injury", color: "from-healing/15 to-teal/10" },
+  { title: "Frozen Shoulder", color: "from-royal/15 to-teal/10" },
+  { title: "Arthritis", color: "from-teal/15 to-healing/10" },
+  { title: "Sciatica", color: "from-healing/15 to-royal/10" },
+  { title: "Slip Disc", color: "from-royal/15 to-healing/10" },
+  { title: "Muscle Tightness", color: "from-teal/15 to-royal/10" },
+  { title: "Post Surgical Rehab", color: "from-healing/15 to-teal/10" },
+  { title: "Posture Issues", color: "from-royal/15 to-teal/10" },
+  { title: "Senior Mobility", color: "from-teal/15 to-healing/10" },
 ] as const;
 
 export const HOME_VISIT_BENEFITS = [
@@ -269,22 +265,6 @@ export const FAQS = [
     q: "Do you treat cervical pain?",
     a: "Yes. Often caused by prolonged phone or laptop use, it responds well to manual therapy, postural correction and ergonomic changes. Most patients see improvement within 2–3 weeks.",
   },
-] as const;
-
-export const STATS = [
-  { value: 155, suffix: "+", label: "Google Reviews" },
-  { value: 4.9, decimals: 1, suffix: "★", label: "Average Rating" },
-  { value: 24, suffix: "/7", label: "Availability" },
-  { value: 100, suffix: "%", label: "Personalized Care" },
-] as const;
-
-export const TRUST_BAR = [
-  "155+ Happy Patients",
-  "4.9 Google Rating",
-  "24×7 Availability",
-  "Home Visit Services",
-  "Expert Physiotherapist",
-  "Evidence-Based Treatment",
 ] as const;
 
 export const NAV_LINKS = [

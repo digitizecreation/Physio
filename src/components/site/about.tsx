@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { SectionWrap, SectionHeading, Reveal } from "@/components/site/reveal";
 import { Counter } from "@/components/site/motion";
-import { BUSINESS } from "@/lib/site/data";
 
 const pillars = [
   {

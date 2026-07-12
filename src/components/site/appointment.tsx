@@ -34,15 +34,20 @@ export function Appointment() {
   const [selectedCondition, setSelectedCondition] = React.useState<string | null>(null);
   const [homeVisit, setHomeVisit] = React.useState(false);
   const [date, setDate] = React.useState<string>("");
+  const [consent, setConsent] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
+  const [today, setToday] = React.useState<string>("");
 
-  const today = new Date().toISOString().split("T")[0];
+  React.useEffect(() => {
+    setToday(new Date().toISOString().split("T")[0]);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedSlot || !consent) return;
     setSubmitting(true);
-    // simulate async submit
+    // Simulate async submit — wire to real backend (API route / WhatsApp) when ready
     setTimeout(() => {
       setSubmitting(false);
       setSubmitted(true);
@@ -179,7 +184,7 @@ export function Appointment() {
                       </Label>
                       <div className="relative mt-1.5">
                         <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                        <Input id="name" required placeholder="Your name" className="pl-9" />
+                        <Input id="name" required maxLength={80} placeholder="Your name" className="pl-9" />
                       </div>
                     </div>
                     <div>
@@ -188,7 +193,7 @@ export function Appointment() {
                       </Label>
                       <div className="relative mt-1.5">
                         <Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                        <Input id="phone" required type="tel" placeholder="+91 ..." className="pl-9" />
+                        <Input id="phone" required type="tel" maxLength={15} pattern="[+]?[0-9\s-]{8,15}" placeholder="e.g. +91 98765 43210" className="pl-9" />
                       </div>
                     </div>
                   </div>
@@ -306,14 +311,33 @@ export function Appointment() {
                     <Textarea
                       id="notes"
                       rows={3}
+                      maxLength={500}
                       placeholder="Briefly describe your symptoms..."
                       className="mt-1.5 resize-none"
                     />
                   </div>
 
+                  {/* Consent checkbox */}
+                  <label className="flex items-start gap-2.5 rounded-xl border border-border/60 bg-card/50 p-3 text-xs text-muted-foreground cursor-pointer hover:bg-card/80 transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={consent}
+                      onChange={(e) => setConsent(e.target.checked)}
+                      required
+                      className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-primary"
+                    />
+                    <span>
+                      I agree to be contacted about my appointment and accept the{" "}
+                      <a href="#privacy" onClick={(e) => { e.preventDefault(); }} className="font-semibold text-primary underline">
+                        Privacy Policy
+                      </a>
+                      . My data will be used solely for scheduling and treatment.
+                    </span>
+                  </label>
+
                   <Button
                     type="submit"
-                    disabled={submitting || !selectedSlot}
+                    disabled={submitting || !selectedSlot || !consent}
                     className="w-full gap-2 shadow-glow-royal"
                   >
                     {submitting ? (

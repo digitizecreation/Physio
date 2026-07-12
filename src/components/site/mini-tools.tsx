@@ -36,7 +36,7 @@ function BmiCalculator() {
   const [weight, setWeight] = React.useState("");
   const [bmi, setBmi] = React.useState<number | null>(null);
 
-  const compute = () => {
+  React.useEffect(() => {
     const h = parseFloat(height) / 100;
     const w = parseFloat(weight);
     if (!h || !w || h <= 0 || w <= 0) {
@@ -44,10 +44,6 @@ function BmiCalculator() {
       return;
     }
     setBmi(parseFloat((w / (h * h)).toFixed(1)));
-  };
-
-  React.useEffect(() => {
-    compute();
   }, [height, weight]);
 
   const category = bmi
@@ -61,7 +57,7 @@ function BmiCalculator() {
     : null;
 
   // position on scale (15-35 range mapped to 0-100%)
-  const pct = bmi ? Math.min(Math.max(((bmi - 15) / 20) * 100, 0), 100) : 50;
+  const pct = bmi ? Math.min(Math.max(((bmi - 15) / 20) * 100, 0), 100) : 0;
 
   return (
     <Reveal>

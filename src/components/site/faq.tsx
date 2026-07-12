@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Plus, MessageCircle, Phone, HelpCircle } from "lucide-react";
+import { MessageCircle, Phone, HelpCircle } from "lucide-react";
 import { SectionWrap, SectionHeading, Reveal } from "@/components/site/reveal";
 import {
   Accordion,
@@ -96,15 +95,3 @@ export function Faq() {
     </SectionWrap>
   );
 }
-
-/* Floating expand icon — kept local to keep AccordionTrigger default chevron swap simple */
-export function FaqPlusIcon({ open }: { open: boolean }) {
-  return (
-    <motion.span animate={{ rotate: open ? 45 : 0 }} className="grid h-6 w-6 place-items-center rounded-full border border-border/70">
-      <Plus className="h-3.5 w-3.5" />
-    </motion.span>
-  );
-}
-
-// keep AnimatePresence import used
-void AnimatePresence;

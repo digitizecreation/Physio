@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, useInView, type Variants } from "framer-motion";
+import { motion, useInView, useReducedMotion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type RevealProps = {
@@ -15,6 +15,12 @@ type RevealProps = {
 export function Reveal({ children, className, delay = 0, y = 24, once = true }: RevealProps) {
   const ref = React.useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once, margin: "-80px 0px -80px 0px" });
+  const prefersReduced = useReducedMotion();
+
+  if (prefersReduced) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <motion.div
       ref={ref}
@@ -28,14 +34,15 @@ export function Reveal({ children, className, delay = 0, y = 24, once = true }: 
   );
 }
 
-export const staggerContainer: Variants = {
+// Module-local — not exported
+const staggerContainer: Variants = {
   hidden: {},
   show: {
     transition: { staggerChildren: 0.08, delayChildren: 0.05 },
   },
 };
 
-export const staggerItem: Variants = {
+const staggerItem: Variants = {
   hidden: { opacity: 0, y: 22 },
   show: {
     opacity: 1,
@@ -51,6 +58,12 @@ export function StaggerGroup({
   children: React.ReactNode;
   className?: string;
 }) {
+  const prefersReduced = useReducedMotion();
+
+  if (prefersReduced) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <motion.div
       initial="hidden"
@@ -71,6 +84,12 @@ export function StaggerItem({
   children: React.ReactNode;
   className?: string;
 }) {
+  const prefersReduced = useReducedMotion();
+
+  if (prefersReduced) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <motion.div variants={staggerItem} className={className}>
       {children}

@@ -20,6 +20,9 @@ const SHOTS: Shot[] = [
 
 export function Gallery() {
   const [open, setOpen] = React.useState<number | null>(null);
+  const triggerRef = React.useRef<HTMLButtonElement | null>(null);
+  const closeBtnRef = React.useRef<HTMLButtonElement | null>(null);
+  const dialogRef = React.useRef<HTMLDivElement | null>(null);
 
   const close = React.useCallback(() => setOpen(null), []);
   const next = React.useCallback(() => setOpen((v) => (v === null ? v : (v + 1) % SHOTS.length)), []);
@@ -31,12 +34,30 @@ export function Gallery() {
       if (e.key === "Escape") close();
       if (e.key === "ArrowRight") next();
       if (e.key === "ArrowLeft") prev();
+      // Focus trap
+      if (e.key === "Tab" && dialogRef.current) {
+        const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+          'button, [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
+    requestAnimationFrame(() => closeBtnRef.current?.focus());
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
+      triggerRef.current?.focus();
     };
   }, [open, close, next, prev]);
 
@@ -57,9 +78,11 @@ export function Gallery() {
         {SHOTS.map((s, i) => (
           <Reveal key={s.id} delay={(i % 4) * 0.05}>
             <motion.button
+              ref={(el) => { if (open === i) triggerRef.current = el; }}
               onClick={() => setOpen(i)}
               whileHover={{ y: -6 }}
               transition={{ type: "spring", stiffness: 280, damping: 20 }}
+              aria-label={`Open ${s.title}`}
               className={`group relative block w-full overflow-hidden rounded-2xl border border-border/60 bg-card/70 shadow-premium backdrop-blur ${
                 i === 0 || i === 5 ? "row-span-2 aspect-[3/4] sm:aspect-auto" : "aspect-square"
               }`}
@@ -95,13 +118,18 @@ export function Gallery() {
       <AnimatePresence>
         {open !== null && (
           <motion.div
+            ref={dialogRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[80] flex items-center justify-center bg-background/90 backdrop-blur-md"
             onClick={close}
+            role="dialog"
+            aria-modal="true"
+            aria-label={open !== null ? SHOTS[open].title : "Gallery"}
           >
             <button
+              ref={closeBtnRef}
               onClick={close}
               aria-label="Close"
               className="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full border border-border/70 bg-card/80 text-foreground backdrop-blur"

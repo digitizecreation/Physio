@@ -14,6 +14,8 @@ import {
   BookOpen,
   TrendingUp,
   Scale,
+  Disc3,
+  PersonStanding,
   type LucideIcon,
 } from "lucide-react";
 
@@ -21,17 +23,17 @@ import {
 // Where Lucide lacks a domain icon, we substitute a sensible one.
 export const ICON_MAP: Record<string, LucideIcon> = {
   // Specializations
-  Knee: Bone,
-  Activity,
   Bone,
-  Disc: Bone, // slip disc — closest
+  Activity,
+  Disc: Disc3,
   Neck: HeartPulse,
   Cervical: HeartPulse,
   Shoulder: Bone,
   Nerve: Activity,
   Muscle: Activity,
+  Joint: Bone,
   Scale,
-  Posture: UserCheck,
+  Posture: PersonStanding,
   Elderly: HeartHandshake,
   Home,
   HeartPulse,

@@ -24,16 +24,29 @@ export function Reviews() {
 
   React.useEffect(() => {
     if (!embla) return;
-    embla.on("select", onSelect);
+    const denoise = embla.on("select", onSelect);
     onSelect();
+    return () => denoise?.();
   }, [embla, onSelect]);
 
-  // autoplay
+  // autoplay — pauses on hover/focus/interaction
+  const autoplayRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
+  const startAutoplay = React.useCallback(() => {
+    if (!embla) return;
+    autoplayRef.current = setInterval(() => embla.scrollNext(), 5000);
+  }, [embla]);
+  const stopAutoplay = React.useCallback(() => {
+    if (autoplayRef.current) {
+      clearInterval(autoplayRef.current);
+      autoplayRef.current = null;
+    }
+  }, []);
+
   React.useEffect(() => {
     if (!embla) return;
-    const id = setInterval(() => embla.scrollNext(), 5000);
-    return () => clearInterval(id);
-  }, [embla]);
+    startAutoplay();
+    return stopAutoplay;
+  }, [embla, startAutoplay, stopAutoplay]);
 
   return (
     <SectionWrap id="reviews" className="relative overflow-hidden bg-secondary/30">
@@ -71,7 +84,7 @@ export function Reviews() {
             </div>
           </div>
           <Button asChild variant="outline" size="sm" className="gap-2">
-            <a href={BUSINESS.social.google} target="_blank" rel="noopener noreferrer">
+            <a href={BUSINESS.googlePlacesUri} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="h-4 w-4" />
               Google
             </a>
@@ -80,7 +93,14 @@ export function Reviews() {
       </div>
 
       <div className="relative mt-12">
-        <div className="overflow-hidden" ref={emblaRef}>
+        <div
+          className="overflow-hidden"
+          ref={emblaRef}
+          onMouseEnter={stopAutoplay}
+          onMouseLeave={startAutoplay}
+          onFocus={stopAutoplay}
+          onBlur={startAutoplay}
+        >
           <div className="flex">
             {REVIEWS.map((r, i) => (
               <div
