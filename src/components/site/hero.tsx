@@ -18,7 +18,7 @@ const floatingIcons = [
 
 export function Hero() {
   return (
-    <section id="top" className="relative isolate overflow-hidden pt-28 sm:pt-32 md:pt-40">
+    <section id="top" className="relative isolate overflow-hidden pt-28 sm:pt-40 md:pt-44">
       {/* Background mesh + glow */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-mesh" aria-hidden />
       <div className="pointer-events-none absolute -top-32 left-1/2 -z-10 h-[520px] w-[920px] -translate-x-1/2 animate-breathe rounded-full bg-gradient-to-tr from-royal/25 via-teal/15 to-healing/10 blur-3xl" aria-hidden />

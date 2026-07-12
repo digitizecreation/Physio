@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { BUSINESS, NAV_LINKS } from "@/lib/site/data";
 import { Magnetic } from "@/components/site/motion";
 import { GoogleG, GoogleStar } from "@/components/site/google-brand";
+import { TopBar } from "@/components/site/top-bar";
 
 export function Navbar() {
   const [open, setOpen] = React.useState(false);
@@ -73,10 +74,15 @@ export function Navbar() {
     <>
       <motion.header
         initial={{ y: -100 }}
-        animate={{ y: hidden ? -110 : 0 }}
+        animate={{ y: hidden ? -160 : 0 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed inset-x-0 top-0 z-50 px-3 pt-3"
+        className="fixed inset-x-0 top-0 z-50"
       >
+        {/* Premium thin top bar — hidden on mobile, hidden on scroll */}
+        <TopBar hidden={hidden} />
+
+        {/* Main navbar */}
+        <div className="px-3 pt-3">
         <nav
           className={cn(
             "mx-auto flex max-w-7xl items-center justify-between gap-4 rounded-2xl px-3 py-2 transition-all duration-300 sm:px-4",
@@ -150,6 +156,7 @@ export function Navbar() {
             </button>
           </div>
         </nav>
+        </div>
       </motion.header>
 
       {/* Mobile drawer */}
