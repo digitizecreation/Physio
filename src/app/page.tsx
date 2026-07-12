@@ -5,7 +5,6 @@ import { Specializations } from "@/components/site/specializations";
 import { WhyChoose } from "@/components/site/why-choose";
 import { TreatmentProcess } from "@/components/site/process";
 import { Reviews } from "@/components/site/reviews";
-import { Conditions } from "@/components/site/conditions";
 import { HomeVisit } from "@/components/site/home-visit";
 import { Statistics } from "@/components/site/statistics";
 import { BodyDiagram } from "@/components/site/body-diagram";
@@ -31,7 +30,6 @@ export default function Home() {
         <WhyChoose />
         <TreatmentProcess />
         <Reviews />
-        <Conditions />
         <HomeVisit />
         <Statistics />
         <BodyDiagram />

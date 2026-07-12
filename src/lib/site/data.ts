@@ -210,23 +210,6 @@ export const REVIEWS = [
 ] as const;
 
 
-export const CONDITIONS = [
-  { title: "Back Pain", icon: "Spine", color: "from-royal/15 to-teal/10" },
-  { title: "Neck Pain", icon: "Neck", color: "from-teal/15 to-healing/10" },
-  { title: "Joint Pain", icon: "Bone", color: "from-healing/15 to-royal/10" },
-  { title: "ACL Injury", icon: "Activity", color: "from-royal/15 to-healing/10" },
-  { title: "Meniscus Tear", icon: "Disc", color: "from-teal/15 to-royal/10" },
-  { title: "Sports Injury", icon: "Trophy", color: "from-healing/15 to-teal/10" },
-  { title: "Frozen Shoulder", icon: "Shoulder", color: "from-royal/15 to-teal/10" },
-  { title: "Arthritis", icon: "Bone", color: "from-teal/15 to-healing/10" },
-  { title: "Sciatica", icon: "Nerve", color: "from-healing/15 to-royal/10" },
-  { title: "Slip Disc", icon: "Disc", color: "from-royal/15 to-healing/10" },
-  { title: "Muscle Tightness", icon: "Muscle", color: "from-teal/15 to-royal/10" },
-  { title: "Post Surgical Rehab", icon: "HeartPulse", color: "from-healing/15 to-teal/10" },
-  { title: "Posture Issues", icon: "Posture", color: "from-royal/15 to-teal/10" },
-  { title: "Senior Mobility", icon: "Elderly", color: "from-teal/15 to-healing/10" },
-] as const;
-
 export const HOME_VISIT_BENEFITS = [
   { title: "Treatment at Home", description: "Professional physiotherapy in your own environment." },
   { title: "Convenient", description: "No travel, no waiting rooms — we come to you." },
@@ -270,7 +253,6 @@ export const FAQS = [
 export const NAV_LINKS = [
   { href: "#about", label: "About" },
   { href: "#specializations", label: "Specializations" },
-  { href: "#conditions", label: "Conditions" },
   { href: "#home-visit", label: "Home Visits" },
   { href: "#faq", label: "FAQ" },
   { href: "#contact", label: "Contact" },
