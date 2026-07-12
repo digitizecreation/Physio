@@ -270,9 +270,6 @@ export const FAQS = [
 export const NAV_LINKS = [
   { href: "#about", label: "About" },
   { href: "#specializations", label: "Specializations" },
-  { href: "#why", label: "Why Choose Us" },
-  { href: "#process", label: "Process" },
-  { href: "#reviews", label: "Reviews" },
   { href: "#conditions", label: "Conditions" },
   { href: "#home-visit", label: "Home Visits" },
   { href: "#faq", label: "FAQ" },

@@ -116,12 +116,6 @@ export function Navbar() {
 
           {/* Right actions */}
           <div className="flex items-center gap-2">
-            <div className="hidden items-center gap-1.5 rounded-full border border-border/70 bg-card/60 px-3 py-1.5 text-xs font-semibold text-foreground md:flex">
-              <Star className="h-3.5 w-3.5 fill-healing text-healing" />
-              4.9
-              <span className="text-muted-foreground">• 155+</span>
-            </div>
-
             {/* Theme toggle — reserve space to prevent CLS */}
             <button
               aria-label="Toggle theme"

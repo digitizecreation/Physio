@@ -63,55 +63,66 @@ export function Gallery() {
 
   return (
     <SectionWrap id="gallery" className="relative overflow-hidden">
-      <SectionHeading
-        eyebrow="Inside the Practice"
-        title={
-          <>
-            A glimpse into{" "}
-            <span className="gradient-text-soft">how we work</span>
-          </>
-        }
-        description="Every session is built around focused, one-on-one care."
-      />
-
-      <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
-        {SHOTS.map((s, i) => (
-          <Reveal key={s.id} delay={(i % 4) * 0.05}>
-            <motion.button
-              ref={(el) => { if (open === i) triggerRef.current = el; }}
-              onClick={() => setOpen(i)}
-              whileHover={{ y: -6 }}
-              transition={{ type: "spring", stiffness: 280, damping: 20 }}
-              aria-label={`Open ${s.title}`}
-              className={`group relative block w-full overflow-hidden rounded-2xl border border-border/60 bg-card/70 shadow-premium backdrop-blur ${
-                i === 0 || i === 5 ? "row-span-2 aspect-[3/4] sm:aspect-auto" : "aspect-square"
-              }`}
-            >
-              <div
-                className="absolute inset-0"
-                style={{
-                  background: `linear-gradient(135deg, ${s.palette[0]} 0%, ${s.palette[1]} 100%)`,
-                }}
-              />
-              {/* Subtle illustrated scene per shot */}
-              <ShotScene id={s.id} />
-
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/10 to-transparent opacity-70 transition-opacity group-hover:opacity-90" />
-              <div className="absolute inset-0 flex flex-col justify-end p-3 text-left">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80">
-                  {s.tag}
-                </span>
-                <span className="mt-1 font-heading text-sm font-bold text-white sm:text-base">
-                  {s.title}
-                </span>
-              </div>
-              <div className="absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-full bg-white/20 backdrop-blur opacity-0 transition-opacity group-hover:opacity-100">
-                <ImageIcon className="h-3.5 w-3.5 text-white" />
-              </div>
-            </motion.button>
+      <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
+        {/* Sticky heading — left column on desktop */}
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <SectionHeading
+            align="left"
+            eyebrow="Inside the Practice"
+            title={
+              <>
+                A glimpse into{" "}
+                <span className="gradient-text-soft">how we work</span>
+              </>
+            }
+            description="Every session is built around focused, one-on-one care."
+          />
+          <Reveal delay={0.15}>
+            <div className="mt-6 hidden items-center gap-2 text-sm text-muted-foreground lg:flex">
+              <ImageIcon className="h-4 w-4 text-primary" />
+              <span>Click any photo to enlarge</span>
+            </div>
           </Reveal>
-        ))}
+        </div>
+
+        {/* Uniform gallery grid — right column on desktop */}
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
+          {SHOTS.map((s, i) => (
+            <Reveal key={s.id} delay={(i % 3) * 0.05}>
+              <motion.button
+                ref={(el) => { if (open === i) triggerRef.current = el; }}
+                onClick={() => setOpen(i)}
+                whileHover={{ y: -6 }}
+                transition={{ type: "spring", stiffness: 280, damping: 20 }}
+                aria-label={`Open ${s.title}`}
+                className="group relative block aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border/60 bg-card/70 shadow-premium backdrop-blur"
+              >
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: `linear-gradient(135deg, ${s.palette[0]} 0%, ${s.palette[1]} 100%)`,
+                  }}
+                />
+                {/* Subtle illustrated scene per shot */}
+                <ShotScene id={s.id} />
+
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/10 to-transparent opacity-70 transition-opacity group-hover:opacity-90" />
+                <div className="absolute inset-0 flex flex-col justify-end p-3 text-left">
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80">
+                    {s.tag}
+                  </span>
+                  <span className="mt-1 font-heading text-sm font-bold text-white sm:text-base">
+                    {s.title}
+                  </span>
+                </div>
+                <div className="absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-full bg-white/20 backdrop-blur opacity-0 transition-opacity group-hover:opacity-100">
+                  <ImageIcon className="h-3.5 w-3.5 text-white" />
+                </div>
+              </motion.button>
+            </Reveal>
+          ))}
+        </div>
       </div>
 
       {/* Lightbox */}
