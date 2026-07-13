@@ -1,12 +1,13 @@
 #!/bin/bash
 #
-# Git post-commit hook: Auto-update Claude.md
+# Git post-commit hook: Auto-update CLAUDE.md
 #
-# This hook runs automatically after every `git commit`.
-# It:
-#   1. Runs lint + TypeScript check (to confirm the commit is "tested")
-#   2. If checks pass, runs the update-claude-md.ts script
-#   3. If Claude.md was modified, auto-amends the commit to include it
+# Runs after every `git commit`. It:
+#   1. Runs ESLint on the files changed in this commit (scoped — pre-existing errors in
+#      unchanged files don't block). Logs the full-project lint count too.
+#   2. Runs `npx tsc --noEmit` on src/ (must be clean — TypeScript is the hard gate).
+#   3. If both pass, runs `node scripts/update-claude-md.ts` to append a changelog entry.
+#   4. If CLAUDE.md was modified, auto-amends the commit to include the update.
 #
 # To skip this hook for a specific commit, set the env var:
 #   SKIP_CLAUDE_MD_UPDATE=1 git commit -m "..."
@@ -14,77 +15,119 @@
 
 set -e
 
-# Allow skipping
+# ─── Skip guards ────────────────────────────────────────────
+
+# Manual skip via env var
 if [ "$SKIP_CLAUDE_MD_UPDATE" = "1" ]; then
-  echo "⏭️  Skipping Claude.md update (SKIP_CLAUDE_MD_UPDATE=1)"
+  echo "⏭️  Skipping CLAUDE.md update (SKIP_CLAUDE_MD_UPDATE=1)"
   exit 0
 fi
 
-# Guard against re-entry: if the commit message starts with "[amend]" or
-# we're already in a CLAUDE_MD_UPDATING session, skip.
+# Re-entry guard: when this hook amends a commit, the post-commit event fires again
 if [ "$CLAUDE_MD_UPDATING" = "1" ]; then
   exit 0
 fi
 
-PROJECT_DIR="/home/z/my-project"
-cd "$PROJECT_DIR"
-
-# Check if Claude.md was the ONLY changed file (likely an amend from ourselves)
+# Self-amend guard: if the ONLY file changed in this commit is CLAUDE.md (we are amending
+# ourselves), skip to avoid infinite loops
 CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
-if [ "$CHANGED_FILES" = "Claude.md" ]; then
-  # This is likely our own amend — skip to avoid infinite loop
+if [ "$CHANGED_FILES" = "CLAUDE.md" ]; then
   exit 0
 fi
 
-echo ""
-echo "📋 Post-commit: Checking code quality..."
+# ─── Resolve paths relative to this script ──────────────────
+# Works in any sandbox (Linux) and on Windows + Git Bash
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# ─── Step 1: Lint check ────────────────────────────────────
-echo "🔍 Running ESLint..."
-LINT_OUTPUT=$(bun run lint 2>&1 || true)
-if echo "$LINT_OUTPUT" | grep -q "✖.*error"; then
-  echo "⚠️  Lint has warnings/errors — still updating Claude.md but please fix issues."
+cd "$PROJECT_DIR"
+
+# Pick a runtime for the updater: bun if present, else node
+if command -v bun >/dev/null 2>&1; then
+  RUNNER="bun"
 else
-  echo "✅ Lint passed."
+  RUNNER="node"
 fi
 
-# ─── Step 2: TypeScript check (src/ only) ──────────────────
-echo "🔍 Running TypeScript check..."
+echo ""
+echo "📋 Post-commit: Checking code quality (runner=$RUNNER)..."
+
+# ─── Step 1: ESLint (scoped to changed files) ──────────────
+# Scoping: only block on errors in files that were changed in this commit.
+# Pre-existing errors in unchanged files get logged but don't block the update.
+echo "🔍 Running ESLint on changed files..."
+
+# Collect changed files in this commit (limit to .ts/.tsx/.js/.jsx)
+CHANGED_TS_FILES=$(git diff --name-only HEAD~1 HEAD -- 'src/**/*.{ts,tsx,js,jsx,mjs}' 2>/dev/null | tr '\n' ' ' | sed 's/ $//')
+
+if [ -z "$CHANGED_TS_FILES" ]; then
+  echo "ℹ️  No TS/JS source files changed — skipping scoped lint."
+  SCOPED_LINT_OK=1
+else
+  echo "   Scoped to: $CHANGED_TS_FILES"
+  if npx eslint $CHANGED_TS_FILES 2>&1 | tee /tmp/claude-md-hook-eslint.log | tail -5; then
+    if grep -qE "✖.*error" /tmp/claude-md-hook-eslint.log; then
+      echo "⚠️  ESLint errors in CHANGED files — aborting CLAUDE.md update."
+      echo "   Fix the errors above, or re-commit with SKIP_CLAUDE_MD_UPDATE=1 to skip this hook."
+      exit 1
+    else
+      echo "✅ Scoped ESLint passed (changed files clean)."
+      SCOPED_LINT_OK=1
+    fi
+  else
+    echo "⚠️  ESLint command failed — aborting."
+    exit 1
+  fi
+fi
+
+# Also log the full-project lint status (informational only)
+echo "🔍 Running full-project ESLint (informational, will not block)..."
+FULL_LINT_OUTPUT=$(npx eslint . 2>&1 || true)
+FULL_LINT_ERRORS=$(echo "$FULL_LINT_OUTPUT" | grep -oE "✖ [0-9]+ problems" | head -1)
+if [ -n "$FULL_LINT_ERRORS" ]; then
+  echo "   ℹ️  $FULL_LINT_ERRORS in full project (not blocking — pre-existing debt)."
+else
+  echo "   ✅ Full-project ESLint clean."
+fi
+
+# ─── Step 2: TypeScript check (the hard gate) ──────────────
+echo "🔍 Running TypeScript check on src/..."
 TS_ERRORS=$(npx tsc --noEmit 2>&1 | grep "^src/" || true)
 if [ -z "$TS_ERRORS" ]; then
-  echo "✅ TypeScript check passed (src/)."
+  echo "✅ TypeScript check passed (src/ clean)."
 else
-  echo "⚠️  TypeScript errors in src/:"
+  echo "❌ TypeScript errors in src/:"
   echo "$TS_ERRORS"
-  echo "⚠️  Still updating Claude.md but please fix TS errors."
+  echo "Aborting CLAUDE.md update. Fix TS errors or re-commit with SKIP_CLAUDE_MD_UPDATE=1."
+  exit 1
 fi
 
-# ─── Step 3: Run the Claude.md updater ─────────────────────
+# ─── Step 3: Run the CLAUDE.md updater ─────────────────────
 echo ""
-echo "🤖 Running Claude.md auto-updater..."
+echo "🤖 Running CLAUDE.md auto-updater..."
 
 # Set env var to prevent re-entry during amend
 export CLAUDE_MD_UPDATING=1
 
-if bun run scripts/update-claude-md.ts 2>&1; then
-  # Check if Claude.md was modified
-  if ! git diff --quiet Claude.md 2>/dev/null; then
+if $RUNNER scripts/update-claude-md.ts 2>&1; then
+  # Check if CLAUDE.md was modified
+  if ! git diff --quiet CLAUDE.md 2>/dev/null; then
     echo ""
-    echo "📝 Claude.md was updated. Staging and amending the commit..."
+    echo "📝 CLAUDE.md was updated. Staging and amending the commit..."
 
-    # Stage the updated Claude.md
-    git add Claude.md
+    # Stage the updated CLAUDE.md
+    git add CLAUDE.md
 
-    # Amend the last commit to include Claude.md
-    # This keeps history clean — the Claude.md update is part of the feature commit
+    # Amend the last commit to include CLAUDE.md
+    # --no-edit preserves the original commit message
     git commit --amend --no-edit
 
-    echo "✅ Commit amended to include Claude.md update."
+    echo "✅ Commit amended to include CLAUDE.md update."
   else
-    echo "ℹ️  Claude.md was not modified."
+    echo "ℹ️  CLAUDE.md was not modified."
   fi
 else
-  echo "⚠️  Claude.md updater failed. Continuing without update."
+  echo "⚠️  CLAUDE.md updater failed. Continuing without update."
 fi
 
 unset CLAUDE_MD_UPDATING
