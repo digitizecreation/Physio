@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -52,3 +53,26 @@ prompt
 server.log
 # Skills directory
 /skills/
+
+# ─── Project-specific additions (2026-07-13) ─────────────────
+# SQLite / dormant Prisma DB — local-only, no PII, never push
+db/*.db
+db/*.db-journal
+
+# zscripts runtime artifacts — process IDs, not source
+.zscripts/dev.pid
+.zscripts/*.log
+
+# Local-only Claude agent definitions and runtime
+.claude/
+
+# Mini-services runtime outputs (the dir is .gitkeep-tracked; the build outputs are not)
+mini-services/*/node_modules
+mini-services/*/dist
+mini-services/*/.next
+mini-services/*/dev.log
+
+# Screenshots and chat artifacts — never push
+Screenshot_*.png
+Screenshot_*.jpg
+upload/*

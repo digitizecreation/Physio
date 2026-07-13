@@ -84,6 +84,21 @@ const PARTS: BodyPart[] = [
 
 export function BodyDiagram() {
   const [active, setActive] = React.useState<BodyPart | null>(null);
+  // Map of body part id → its hotspot <g> element, so we can restore focus on close
+  const hotspotRefs = React.useRef<Record<string, SVGGElement | null>>({});
+  const close = React.useCallback(() => {
+    const id = active?.id;
+    setActive(null);
+    // Defer focus restore until after the panel's exit animation, so focus lands cleanly
+    if (id) {
+      requestAnimationFrame(() => {
+        hotspotRefs.current[id]?.focus();
+      });
+    }
+  }, [active?.id]);
+  const activate = React.useCallback((p: BodyPart) => {
+    setActive(p);
+  }, []);
 
   return (
     <SectionWrap id="body-map" className="relative overflow-hidden bg-secondary/30">
@@ -147,15 +162,19 @@ export function BodyDiagram() {
                   return (
                     <g
                       key={p.id}
-                      onClick={() => setActive(p)}
+                      ref={(el) => {
+                        hotspotRefs.current[p.id] = el;
+                      }}
+                      onClick={() => activate(p)}
                       className="cursor-pointer"
                       role="button"
                       tabIndex={0}
                       aria-label={`${p.label} — view treatments`}
+                      aria-expanded={isActive}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
                           e.preventDefault();
-                          setActive(p);
+                          activate(p);
                         }
                       }}
                     >
@@ -219,7 +238,7 @@ export function BodyDiagram() {
               >
                 <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br from-royal/15 to-teal/10 blur-2xl" />
                 <button
-                  onClick={() => setActive(null)}
+                  onClick={close}
                   aria-label="Close"
                   className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-lg border border-border/70 bg-card/70 backdrop-blur transition-colors hover:bg-accent/20"
                 >

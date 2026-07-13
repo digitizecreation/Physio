@@ -37,17 +37,20 @@ export function Appointment() {
   const [consent, setConsent] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
-  const [today, setToday] = React.useState<string>("");
+  const today = React.useState<string>(() =>
+    typeof window === "undefined" ? "" : new Date().toISOString().split("T")[0],
+  )[0];
   const [showPrivacy, setShowPrivacy] = React.useState(false);
   const [form, setForm] = React.useState({ name: "", phone: "", notes: "" });
-
-  React.useEffect(() => {
-    setToday(new Date().toISOString().split("T")[0]);
-  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedSlot || !consent) return;
+    if (today && date && date < today) {
+      // Defensive: the `min` attr is empty on first SSR paint, so guard against past dates here too
+      setDate(today);
+      return;
+    }
     setSubmitting(true);
     // Simulate async submit — wire to real backend (API route / WhatsApp) when ready
     setTimeout(() => {

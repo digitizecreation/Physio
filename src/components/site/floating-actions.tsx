@@ -54,7 +54,7 @@ export function FloatingActions() {
           transition={{ delay: 0.6, type: "spring", stiffness: 280, damping: 18 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.96 }}
-          className="relative grid h-13 w-13 place-items-center rounded-full bg-[#25D366] text-white shadow-glow-healing sm:h-14 sm:w-14"
+          className="relative grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-glow-healing"
         >
           <span className="absolute inset-0 -z-10 animate-pulse-ring rounded-full" />
           <MessageCircle className="h-6 w-6" />
@@ -69,7 +69,7 @@ export function FloatingActions() {
           transition={{ delay: 0.5, type: "spring", stiffness: 280, damping: 18 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.96 }}
-          className="grid h-13 w-13 place-items-center rounded-full gradient-royal-teal text-white shadow-glow-royal sm:h-14 sm:w-14"
+          className="grid h-14 w-14 place-items-center rounded-full gradient-royal-teal text-white shadow-glow-royal"
         >
           <Phone className="h-5 w-5" />
         </motion.a>

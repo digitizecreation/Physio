@@ -18,7 +18,12 @@ export function Reveal({ children, className, delay = 0, y = 24, once = true }: 
   const prefersReduced = useReducedMotion();
 
   if (prefersReduced) {
-    return <div className={className}>{children}</div>;
+    // Keep a motion.div so the type contract matches (delay/y/once are intentionally no-ops here)
+    return (
+      <motion.div ref={ref} className={className}>
+        {children}
+      </motion.div>
+    );
   }
 
   return (
@@ -61,7 +66,12 @@ export function StaggerGroup({
   const prefersReduced = useReducedMotion();
 
   if (prefersReduced) {
-    return <div className={className}>{children}</div>;
+    // motion.div keeps the type contract; initial/animate are no-ops without useInView involvement
+    return (
+      <motion.div initial={false} animate={false} className={className}>
+        {children}
+      </motion.div>
+    );
   }
 
   return (
@@ -87,7 +97,12 @@ export function StaggerItem({
   const prefersReduced = useReducedMotion();
 
   if (prefersReduced) {
-    return <div className={className}>{children}</div>;
+    // motion.div keeps the type contract; variants prop is intentionally absent in this branch
+    return (
+      <motion.div initial={false} animate={false} className={className}>
+        {children}
+      </motion.div>
+    );
   }
 
   return (

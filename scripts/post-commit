@@ -23,22 +23,21 @@ if [ "$SKIP_CLAUDE_MD_UPDATE" = "1" ]; then
   exit 0
 fi
 
-# Re-entry guard: when this hook amends a commit, the post-commit event fires again
+# Re-entry guard: when this hook amends a commit, the post-commit event fires again.
+# The CLAUDE_MD_UPDATING env var is set during the amend to prevent that.
 if [ "$CLAUDE_MD_UPDATING" = "1" ]; then
   exit 0
 fi
 
-# Self-amend guard: if the ONLY file changed in this commit is CLAUDE.md (we are amending
-# ourselves), skip to avoid infinite loops
-CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
-if [ "$CHANGED_FILES" = "CLAUDE.md" ]; then
-  exit 0
-fi
+# NOTE: We intentionally do NOT skip when the previous commit was CLAUDE.md-only.
+# The CLAUDE_MD_UPDATING env var is the single source of truth for "we are mid-amend",
+# and it survives across the git commit --amend invocation inside this hook.
 
 # ─── Resolve paths relative to this script ──────────────────
-# Works in any sandbox (Linux) and on Windows + Git Bash
+# This hook lives at <project>/.git/hooks/post-commit
+# So: dirname($0) = .git/hooks  →  ../.. = project root
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 cd "$PROJECT_DIR"
 
@@ -58,7 +57,10 @@ echo "📋 Post-commit: Checking code quality (runner=$RUNNER)..."
 echo "🔍 Running ESLint on changed files..."
 
 # Collect changed files in this commit (limit to .ts/.tsx/.js/.jsx)
-CHANGED_TS_FILES=$(git diff --name-only HEAD~1 HEAD -- 'src/**/*.{ts,tsx,js,jsx,mjs}' 2>/dev/null | tr '\n' ' ' | sed 's/ $//')
+# NOTE: brace expansion `{a,b}` is unreliable in Git Bash pathspecs — use repeated
+# `--name-only` calls or filter downstream. We use a single broad pattern and filter
+# by extension in the shell (more portable than multiple pathspecs).
+CHANGED_TS_FILES=$(git diff --name-only HEAD~1 HEAD -- 'src/' 'scripts/' 2>/dev/null | grep -E '\.(ts|tsx|js|jsx|mjs)$' | tr '\n' ' ' | sed 's/ $//')
 
 if [ -z "$CHANGED_TS_FILES" ]; then
   echo "ℹ️  No TS/JS source files changed — skipping scoped lint."
@@ -110,12 +112,21 @@ echo "🤖 Running CLAUDE.md auto-updater..."
 export CLAUDE_MD_UPDATING=1
 
 if $RUNNER scripts/update-claude-md.ts 2>&1; then
-  # Check if CLAUDE.md was modified
+  # Check if CLAUDE.md was modified. Two cases:
+  #   1. File is tracked and changed: `git diff --quiet CLAUDE.md` returns non-zero
+  #   2. File is untracked and exists: `git status --porcelain` shows it under `??`
+  CLAUDE_MD_CHANGED=0
   if ! git diff --quiet CLAUDE.md 2>/dev/null; then
+    CLAUDE_MD_CHANGED=1
+  elif git status --porcelain CLAUDE.md 2>/dev/null | grep -q "^?? CLAUDE.md"; then
+    CLAUDE_MD_CHANGED=1
+  fi
+
+  if [ "$CLAUDE_MD_CHANGED" = "1" ]; then
     echo ""
     echo "📝 CLAUDE.md was updated. Staging and amending the commit..."
 
-    # Stage the updated CLAUDE.md
+    # Stage the updated CLAUDE.md (handles both tracked-modified and untracked-new)
     git add CLAUDE.md
 
     # Amend the last commit to include CLAUDE.md

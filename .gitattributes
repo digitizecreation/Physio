@@ -1,0 +1,40 @@
+# Force LF line endings for source files. Prevents the Windows CRLF/Unix LF
+# churn that produced 100+ "modified" files on first checkout of this project.
+
+# Default for everything not explicitly listed
+* text=auto eol=lf
+
+# Shell, YAML, JSON, Markdown, plain text — must be LF
+*.sh           text eol=lf
+*.bash         text eol=lf
+*.zsh          text eol=lf
+*.yml          text eol=lf
+*.yaml         text eol=lf
+*.json         text eol=lf
+*.md           text eol=lf
+*.txt          text eol=lf
+*.gitignore    text eol=lf
+*.gitattributes text eol=lf
+*.env          text eol=lf
+*.env.example  text eol=lf
+
+# Source code — always LF (this is what Next.js + TS tooling expects)
+*.ts           text eol=lf
+*.tsx          text eol=lf
+*.js           text eol=jsx eol=lf
+*.jsx          text eol=jsx eol=lf
+*.mjs          text eol=lf
+*.cjs          text eol=lf
+*.css          text eol=lf
+*.scss         text eol=lf
+*.html         text eol=lf
+*.svg          text eol=lf
+
+# Caddyfile, Docker, CI — must be LF
+Caddyfile      text eol=lf
+Dockerfile     text eol=lf
+*.dockerfile   text eol=lf
+
+# Shell hooks — must be executable on Linux, but LF line endings
+.gitattributes text eol=lf
+.gitignore     text eol=lf
