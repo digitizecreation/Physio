@@ -6,3 +6,4 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Test comment for the post-commit hook end-to-end verification (2026-07-13)
+// Second test comment to verify the hook fires repeatedly (2026-07-13)

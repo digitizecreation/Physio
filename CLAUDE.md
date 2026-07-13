@@ -274,6 +274,7 @@ After making changes, verify with **Agent Browser**:
 ---
 
 ## Changelog (Recent)
+- **2026-07-13**: add second test comment to verify hook fires repeatedly
 - **2026-07-13**: add test comment to exercise post-commit hook
 - **2025-07-12**: Fixed 11 issues from Tasks 7+8 review (TopBar contrast, inert on scroll, carousel reduced-motion, chatbot aria-live, loading screen flash, Caddyfile TLS, appointment honest notice)
 - **2025-07-12**: Added premium top bar component with contact info and social proof
