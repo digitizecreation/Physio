@@ -274,6 +274,7 @@ After making changes, verify with **Agent Browser**:
 ---
 
 ## Changelog (Recent)
+- **2026-07-13**: exclude examples/, scripts/, prisma/, .zscripts/ from type-check
 - **2026-07-13**: untrack secrets, add .gitattributes, prep for GitHub push
 - **2026-07-13**: remove post-commit hook test comments
 - **2026-07-13**: add second test comment to verify hook fires repeatedly
