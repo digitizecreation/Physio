@@ -121,11 +121,11 @@ export function ChatBot() {
       case "book":
         return {
           role: "bot",
-          text: `You can book an appointment in two ways:\n\n1. Use the booking form on this page (scroll to the "Book Appointment" section).\n2. Call or WhatsApp directly: ${BUSINESS.phone}\n\nSame-day slots are often available!`,
+          text: `You can book an appointment in two ways:\n\n1. Use the online scheduler on this page (scroll to the "Book Appointment" section and pick a date and time).\n2. Call or WhatsApp directly: ${BUSINESS.phone}\n\nSame-day slots are often available!`,
           chips: [
             { label: `Call ${BUSINESS.phone}`, action: "call" },
             { label: "WhatsApp", action: "whatsapp" },
-            { label: "Scroll to form", action: "scroll-form" },
+            { label: "Book online", action: "scroll-form" },
           ],
         };
       case "call":

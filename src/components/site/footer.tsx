@@ -282,11 +282,11 @@ function PrivacyContent() {
         Dr. Samrudhhi A. Mane (&ldquo;we&rdquo;, &ldquo;our&rdquo;, &ldquo;us&rdquo;) operates this website to provide information about our physiotherapy services and to allow patients to request appointments. This Privacy Policy describes how we collect, use, and protect your personal data in accordance with the Digital Personal Data Protection Act, 2023 (DPDP Act) of India.
       </p>
       <h3 className="font-heading font-bold text-foreground">Data We Collect</h3>
-      <p>When you use the appointment booking form, we collect:</p>
+      <p>When you book through the online scheduler in the appointment section (powered by Calendly), your booking details are collected by Calendly and shared with us. This includes:</p>
       <ul className="list-disc space-y-1 pl-5">
         <li>Your name</li>
-        <li>Your phone number</li>
-        <li>Your preferred appointment date and time</li>
+        <li>Your email address</li>
+        <li>Your selected appointment date and time</li>
         <li>Optional notes about your symptoms or condition</li>
       </ul>
       <h3 className="font-heading font-bold text-foreground">How We Use Your Data</h3>

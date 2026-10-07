@@ -19,8 +19,12 @@
 ErrorDocument 404 /404.html
 
 # --- Security headers (ported from next.config.ts) -------------------
+# CSP note: https://assets.calendly.com (widget.js) and https://calendly.com
+# (booking iframe in the appointment section) are the only third-party
+# resources the Calendly embed needs from this page — everything the iframe
+# loads internally is governed by Calendly's own policy, not this one.
 <IfModule mod_headers.c>
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://lh3.googleusercontent.com data: blob:; frame-src https://www.google.com; connect-src 'self' https://wa.me; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://assets.calendly.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://lh3.googleusercontent.com data: blob:; frame-src https://www.google.com https://calendly.com; connect-src 'self' https://wa.me; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
   Header always set X-Frame-Options "DENY"
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
