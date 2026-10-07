@@ -1,0 +1,57 @@
+# =====================================================================
+# Apache / LiteSpeed configuration for Hostinger shared hosting
+# =====================================================================
+# This file is shipped inside out/ (Next.js copies public/ into the
+# static export). Security headers below are ported 1:1 from the old
+# next.config.ts headers() — a static export is served as plain files,
+# so the web server must emit these headers instead of Next.js.
+# =====================================================================
+
+# --- Force HTTPS (Hostinger also offers "Force HTTPS" in hPanel) -----
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+</IfModule>
+
+# --- Branded 404 (Next.js static export emits 404.html) --------------
+ErrorDocument 404 /404.html
+
+# --- Security headers (ported from next.config.ts) -------------------
+<IfModule mod_headers.c>
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://lh3.googleusercontent.com data: blob:; frame-src https://www.google.com; connect-src 'self' https://wa.me; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
+  Header always set X-Frame-Options "DENY"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+</IfModule>
+
+# --- Compression ------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript \
+    application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+# --- Caching ----------------------------------------------------------
+# HTML: always revalidate so new deploys are picked up immediately.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+# JS/CSS/woff2: only exist under /_next/static/ where filenames are
+# content-hashed by Next.js — safe to cache for a year, immutable.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+# Public assets (og-image.png, icon.svg, logo.svg, robots.txt, ...):
+# NOT content-hashed — cache for a week and revalidate.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(png|jpg|jpeg|gif|svg|webp|ico|txt|xml)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>

@@ -1,41 +1,24 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  // Static export for shared hosting (Hostinger): `next build` emits out/.
+  // Upload the CONTENTS of out/ to public_html — no Node.js server required.
+  output: "export",
   reactStrictMode: true,
   typescript: {
     ignoreBuildErrors: false,
   },
+  // Static export cannot use the Next.js Image Optimization API (it requires a
+  // Node.js server). No component currently uses next/image; `unoptimized`
+  // keeps any future next/image usage working as plain <img> in the static build.
   images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "lh3.googleusercontent.com" },
-    ],
+    unoptimized: true,
   },
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "Content-Security-Policy",
-            value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://lh3.googleusercontent.com data: blob:; frame-src https://www.google.com; connect-src 'self' https://wa.me; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'",
-          },
-          { key: "X-Frame-Options", value: "DENY" },
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          {
-            key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=(), payment=()",
-          },
-          {
-            key: "Strict-Transport-Security",
-            value: "max-age=63072000; includeSubDomains; preload",
-          },
-        ],
-      },
-    ];
-  },
+  // NOTE: Security headers (CSP, X-Frame-Options, HSTS, etc.) were previously
+  // set here via headers(). A static export is served as plain files, so those
+  // headers must be applied by the web server instead — they now live in
+  // public/.htaccess (copied into out/ at build time) for Apache/LiteSpeed
+  // shared hosting. Keep .htaccess in sync if you change security policy.
 };
 
 export default nextConfig;
